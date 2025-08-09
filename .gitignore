@@ -69,3 +69,4 @@ Dockerfile*
 # Backup files
 *.bak
 *.backup
+.vercel

@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import InteractiveTerminal from '../components/InteractiveTerminal'
 import MetricsCard from '../components/MetricsCard'
 import DemoCarousel from '../components/DemoCarousel'
 import ArchitectureDiagram from '../components/ArchitectureDiagram'
 import LeadForm from '../components/LeadForm'
+import BuildProcessDemo from '../components/BuildProcessDemo'
 import EditableText from '../components/EditableText'
 import AdminPanel from '../components/AdminPanel'
 import { useEditMode } from '../hooks/useEditMode'
 
 function Home() {
+  const navigate = useNavigate()
   const [currentDemo, setCurrentDemo] = useState(0)
   const [metrics, setMetrics] = useState({
     automation: { value: 4000, unit: 'Lines' },
@@ -145,9 +148,22 @@ function Home() {
         </div>
       </section>
 
+      {/* Build Process Demo */}
+      <section className="build-process-section">
+        <BuildProcessDemo />
+      </section>
+
       {/* Architecture Overview */}
       <section className="architecture-section">
-        <h2>🏗️ ארכיטקטורת המערכת</h2>
+        <div className="architecture-header">
+          <h2>🏗️ ארכיטקטורת המערכת</h2>
+          <button 
+            className="detailed-view-btn"
+            onClick={() => navigate('/architecture')}
+          >
+            🔍 עיון מפורט בארכיטקטורה
+          </button>
+        </div>
         <ArchitectureDiagram />
       </section>
 
