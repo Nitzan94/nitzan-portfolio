@@ -129,7 +129,14 @@ function Home() {
 
       {/* Interactive Demos */}
       <section id="demo-section" className="demo-section">
-        <h2>💻 הדגמות אינטרקטיביות</h2>
+        <EditableText
+          id="demo-section-title"
+          defaultValue="💻 הדגמות אינטרקטיביות"
+          tag="h2"
+          isEditMode={isEditMode}
+          onUpdate={updateText}
+          getValue={getText}
+        />
         <DemoCarousel currentDemo={currentDemo} setCurrentDemo={setCurrentDemo} />
         
         <div className="terminal-container">
@@ -156,7 +163,14 @@ function Home() {
       {/* Architecture Overview */}
       <section className="architecture-section">
         <div className="architecture-header">
-          <h2>🏗️ ארכיטקטורת המערכת</h2>
+          <EditableText
+            id="architecture-title"
+            defaultValue="🏗️ ארכיטקטורת המערכת"
+            tag="h2"
+            isEditMode={isEditMode}
+            onUpdate={updateText}
+            getValue={getText}
+          />
           <button 
             className="detailed-view-btn"
             onClick={() => navigate('/architecture')}
@@ -169,15 +183,52 @@ function Home() {
 
       {/* Success Stories */}
       <section className="success-section">
-        <h2>🌟 סיפורי הצלחה</h2>
+        <EditableText
+          id="success-title"
+          defaultValue="🌟 סיפורי הצלחה"
+          tag="h2"
+          isEditMode={isEditMode}
+          onUpdate={updateText}
+          getValue={getText}
+        />
         <div className="testimonials-grid">
           <div className="testimonial-card">
-            <p>"המערכת של ניצן חסכה לנו 40 שעות עבודה בשבוע"</p>
-            <span>- מנהל פיתוח, חברת היי-טק</span>
+            <EditableText
+              id="testimonial-1-text"
+              defaultValue="המערכת של ניצן חסכה לנו 40 שעות עבודה בשבוע"
+              tag="p"
+              multiline={true}
+              isEditMode={isEditMode}
+              onUpdate={updateText}
+              getValue={getText}
+            />
+            <EditableText
+              id="testimonial-1-author"
+              defaultValue="- מנהל פיתוח, חברת היי-טק"
+              tag="span"
+              isEditMode={isEditMode}
+              onUpdate={updateText}
+              getValue={getText}
+            />
           </div>
           <div className="testimonial-card">
-            <p>"האוטומציה שלה שינתה לנו את כל תהליך הפיתוח"</p>
-            <span>- CTO, סטארט-אפ טכנולוגי</span>
+            <EditableText
+              id="testimonial-2-text"
+              defaultValue="האוטומציה שלה שינתה לנו את כל תהליך הפיתוח"
+              tag="p"
+              multiline={true}
+              isEditMode={isEditMode}
+              onUpdate={updateText}
+              getValue={getText}
+            />
+            <EditableText
+              id="testimonial-2-author"
+              defaultValue="- CTO, סטארט-אפ טכנולוגי"
+              tag="span"
+              isEditMode={isEditMode}
+              onUpdate={updateText}
+              getValue={getText}
+            />
           </div>
         </div>
       </section>

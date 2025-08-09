@@ -63,15 +63,19 @@ function ArchitectureDiagram() {
   ]
 
   const getNodePosition = (index, total) => {
-    const angle = (index * 2 * Math.PI) / total
-    const radius = 120
-    const centerX = 200
-    const centerY = 150
+    // Create a more spread out, visually appealing layout
+    const positions = [
+      { x: 200, y: 80 },   // Claude Core - center top
+      { x: 350, y: 160 },  // Templates - right
+      { x: 300, y: 280 },  // MCP - bottom right
+      { x: 100, y: 280 },  // Automation - bottom left
+      { x: 50, y: 160 },   // GitHub - left
+      { x: 200, y: 320 },  // Vercel - bottom center
+      { x: 120, y: 80 },   // Memory - top left
+      { x: 280, y: 80 }    // Analytics - top right
+    ]
     
-    return {
-      x: centerX + radius * Math.cos(angle),
-      y: centerY + radius * Math.sin(angle)
-    }
+    return positions[index] || { x: 200, y: 150 }
   }
 
   const getNodeColor = (type) => {
@@ -92,7 +96,10 @@ function ArchitectureDiagram() {
   return (
     <div className="architecture-diagram">
       <div className="diagram-container">
-        <svg width="400" height="300" className="architecture-svg">
+        <div className="diagram-instructions">
+          <p>👆 לחץ על כל רכיב כדי לקבל הסבר מפורט</p>
+        </div>
+        <svg width="500" height="400" className="architecture-svg">
           {/* Connections */}
           {nodes.map(node => 
             node.connections.map(connId => {
@@ -127,27 +134,78 @@ function ArchitectureDiagram() {
             )
             
             return (
-              <g key={node.id}>
+              <g key={node.id} className="node-group">
+                {/* Pulsing effect for unselected nodes */}
+                {!selectedNode && (
+                  <circle
+                    cx={pos.x}
+                    cy={pos.y}
+                    r={25}
+                    fill={getNodeColor(node.type)}
+                    opacity="0.3"
+                    className="pulse-circle"
+                  />
+                )}
+                
+                {/* Main node circle */}
                 <circle
                   cx={pos.x}
                   cy={pos.y}
-                  r={isSelected ? 25 : 20}
+                  r={isSelected ? 28 : 22}
                   fill={getNodeColor(node.type)}
                   stroke={isSelected ? '#333' : isConnected ? '#666' : '#FFF'}
-                  strokeWidth={isSelected ? 3 : 2}
+                  strokeWidth={isSelected ? 4 : 2}
                   className="architecture-node"
                   onClick={() => handleNodeClick(node)}
                   style={{ cursor: 'pointer' }}
                 />
+                
+                {/* Click hint icon */}
+                {!selectedNode && (
+                  <text
+                    x={pos.x + 20}
+                    y={pos.y - 15}
+                    fontSize="12"
+                    fill="#667eea"
+                    className="click-hint"
+                    style={{ pointerEvents: 'none' }}
+                  >
+                    👆
+                  </text>
+                )}
+                
+                {/* Node title */}
                 <text
                   x={pos.x}
-                  y={pos.y + 35}
+                  y={pos.y + 40}
                   textAnchor="middle"
                   className="node-label"
-                  fontSize="12"
+                  fontSize="14"
+                  fontWeight="600"
                   fill="#333"
                 >
                   {node.title}
+                </text>
+                
+                {/* Node type badge */}
+                <rect
+                  x={pos.x - 25}
+                  y={pos.y + 45}
+                  width="50"
+                  height="16"
+                  rx="8"
+                  fill={getNodeColor(node.type)}
+                  opacity="0.8"
+                />
+                <text
+                  x={pos.x}
+                  y={pos.y + 55}
+                  textAnchor="middle"
+                  fontSize="10"
+                  fontWeight="600"
+                  fill="white"
+                >
+                  {node.type}
                 </text>
               </g>
             )
