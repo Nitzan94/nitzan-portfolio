@@ -47,6 +47,16 @@ function ContentControlPanel({ isEditMode, onExport, onImport }) {
           🔗 הגדר Gist
         </button>
         
+        <button 
+          onClick={() => {
+            localStorage.clear()
+            window.location.reload()
+          }}
+          className="refresh-btn"
+        >
+          🔄 רענן מ-Gist
+        </button>
+        
         <input
           ref={fileInputRef}
           type="file"

@@ -18,10 +18,11 @@ const useContentManager = () => {
 
   const loadContent = async () => {
     try {
-      // נסה לטעון מ-Gist קודם
+      // נסה לטעון מ-Gist קודם (עם cache busting)
       if (GIST_ID !== 'YOUR_GIST_ID_HERE') {
         try {
-          const response = await fetch(GIST_RAW_URL)
+          const cacheBuster = Date.now()
+          const response = await fetch(`${GIST_RAW_URL}?t=${cacheBuster}`)
           if (response.ok) {
             const data = await response.json()
             if (data.content) {
@@ -32,12 +33,12 @@ const useContentManager = () => {
               setColors(data.colors)
               localStorage.setItem('site-colors', JSON.stringify(data.colors))
             }
-            console.log('תוכן נטען מ-Gist בהצלחה')
+            console.log('תוכן נטען מ-Gist בהצלחה', data)
             setLoading(false)
             return
           }
         } catch (gistError) {
-          console.log('לא ניתן לטעון מ-Gist, טוען מ-localStorage')
+          console.log('לא ניתן לטעון מ-Gist:', gistError)
         }
       }
       

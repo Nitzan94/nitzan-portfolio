@@ -79,7 +79,7 @@ function Home() {
             >
               <EditableText
                 id="primary-cta-text"
-                defaultValue="🔍 חקור את האימפלמנטציה"
+                defaultValue="🎥 צפו בהדגמה"
                 tag="span"
                 isEditMode={isEditMode}
                 onUpdate={updateText}

@@ -14,17 +14,21 @@ function EnhancedTimeline() {
   
   // Add edit mode functionality
   const { isEditMode } = useEditMode()
-  const { updateContent, updateColor, getColor } = useContentManager()
+  const { updateContent, updateColor, getColor, getText: getContentText } = useContentManager()
+
+  const getMilestoneText = (id, defaultValue) => {
+    return getContentText ? getContentText(id, defaultValue) : defaultValue
+  }
 
   const milestones = [
-    { time: 0, title: 'התחלה', description: 'קבלת דרישות והגדרת מטרות', icon: '🎯', progress: 0 },
-    { time: 5, title: 'הגדרת פרויקט', description: 'יצירת מבנה פרויקט וקונפיגורציה', icon: '⚙️', progress: 8 },
-    { time: 12, title: 'GitHub Setup', description: 'יצירת repository וקונפיגורציה', icon: '🐙', progress: 17 },
-    { time: 20, title: 'עיצוב ומבנה', description: 'יצירת קומפוננטים בסיסיים', icon: '🎨', progress: 33 },
-    { time: 35, title: 'תכונות מתקדמות', description: 'מערכת CMS ואינטראקטיביות', icon: '⚡', progress: 58 },
-    { time: 45, title: 'בדיקות ואופטימיזציה', description: 'וידוא איכות ותקינות', icon: '🧪', progress: 75 },
-    { time: 52, title: 'פריסה לייצור', description: 'העלאה ל-Vercel וקונפיגורציה', icon: '🚀', progress: 87 },
-    { time: 58, title: 'סיום!', description: 'אתר מושלם ופעיל', icon: '🎉', progress: 100 }
+    { time: 0, title: getMilestoneText('milestone-0-title', 'התחלה'), description: getMilestoneText('milestone-0-desc', 'קבלת דרישות והגדרת מטרות'), icon: '🎯', progress: 0 },
+    { time: 5, title: getMilestoneText('milestone-1-title', 'הגדרת פרויקט'), description: getMilestoneText('milestone-1-desc', 'יצירת מבנה פרויקט וקונפיגורציה'), icon: '⚙️', progress: 8 },
+    { time: 12, title: getMilestoneText('milestone-2-title', 'GitHub Setup'), description: getMilestoneText('milestone-2-desc', 'יצירת repository וקונפיגורציה'), icon: '🐙', progress: 17 },
+    { time: 20, title: getMilestoneText('milestone-3-title', 'עיצוב ומבנה'), description: getMilestoneText('milestone-3-desc', 'יצירת קומפוננטים בסיסיים'), icon: '🎨', progress: 33 },
+    { time: 35, title: getMilestoneText('milestone-4-title', 'תכונות מתקדמות'), description: getMilestoneText('milestone-4-desc', 'מערכת CMS ואינטראקטיביות'), icon: '⚡', progress: 58 },
+    { time: 45, title: getMilestoneText('milestone-5-title', 'בדיקות ואופטימיזציה'), description: getMilestoneText('milestone-5-desc', 'וידוא איכות ותקינות'), icon: '🧪', progress: 75 },
+    { time: 52, title: getMilestoneText('milestone-6-title', 'פריסה לייצור'), description: getMilestoneText('milestone-6-desc', 'העלאה ל-Vercel וקונפיגורציה'), icon: '🚀', progress: 87 },
+    { time: 58, title: getMilestoneText('milestone-7-title', 'סיום!'), description: getMilestoneText('milestone-7-desc', 'אתר מושלם ופעיל'), icon: '🎉', progress: 100 }
   ]
 
   const totalDuration = 60 // 60 minutes

@@ -1386,6 +1386,50 @@ body {
   }
 }
 
+/* Enhanced Timeline Stats Styling */
+.milestone-progress,
+.stat-label,
+.stat-value,
+.completed-checkmark {
+  color: #ffffff !important;
+  font-weight: 600;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.milestone-progress {
+  font-size: 0.85rem;
+  background: rgba(0,0,0,0.3);
+  padding: 2px 8px;
+  border-radius: 12px;
+  display: inline-block;
+  margin-top: 5px;
+}
+
+/* Legend items styling */
+.legend-item {
+  color: #ffffff !important;
+  font-weight: 600;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+}
+
+.legend-item .legend-color {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
 /* Performance Optimizations */
 * {
   will-change: auto;
@@ -1753,7 +1797,7 @@ img {
   margin-bottom: 20px;
 }
 
-.export-btn, .import-btn, .reset-all-btn, .gist-setup-btn {
+.export-btn, .import-btn, .reset-all-btn, .gist-setup-btn, .refresh-btn {
   padding: 12px 20px;
   border: none;
   border-radius: 8px;
@@ -1782,8 +1826,13 @@ img {
   color: #1a1a2e;
   font-weight: bold;
 }
+.refresh-btn {
+  background: linear-gradient(45deg, #a29bfe, #6c5ce7);
+  color: #ffffff;
+  font-weight: bold;
+}
 
-.export-btn:hover, .import-btn:hover, .reset-all-btn:hover, .gist-setup-btn:hover {
+.export-btn:hover, .import-btn:hover, .reset-all-btn:hover, .gist-setup-btn:hover, .refresh-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
