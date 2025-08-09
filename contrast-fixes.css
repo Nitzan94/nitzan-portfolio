@@ -1,0 +1,352 @@
+/* =================================================================
+   ACCESSIBILITY & CONTRAST FIXES
+   Implementation guide for improving color accessibility
+   ================================================================= */
+
+/* === HIGH PRIORITY FIXES === */
+
+/* 1. Form Input Improvements */
+.form-group input,
+.form-group select {
+  /* Increase border contrast from rgba(255,255,255,0.2) */
+  border: 2px solid rgba(255,255,255,0.4) !important;
+  
+  /* Ensure focus states are highly visible */
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  /* Stronger focus indication */
+  border-color: #4ade80 !important;
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.3) !important;
+  outline: 2px solid transparent !important;
+}
+
+.form-group input::placeholder {
+  /* Improve placeholder contrast from #888 */
+  color: #bbb !important;
+}
+
+/* 2. Button Border Improvements */
+.secondary-cta {
+  /* Increase border contrast from rgba(255,255,255,0.3) */
+  border: 2px solid rgba(255,255,255,0.5) !important;
+}
+
+.secondary-cta:focus-visible {
+  outline: 3px solid #4ade80 !important;
+  outline-offset: 2px !important;
+}
+
+/* 3. Stronger Text Shadows for Gradient Backgrounds */
+.hero-title {
+  /* Enhance text shadow for better readability */
+  text-shadow: 
+    2px 2px 8px rgba(0,0,0,0.8),
+    0 0 16px rgba(0,0,0,0.6) !important;
+}
+
+.hero-subtitle {
+  text-shadow: 
+    1px 1px 4px rgba(0,0,0,0.8),
+    0 0 8px rgba(0,0,0,0.6) !important;
+}
+
+/* 4. Card Border Improvements */
+.explanation-card,
+.architecture-component,
+.timeline-step {
+  /* Increase border visibility from rgba(255,255,255,0.1) */
+  border: 1px solid rgba(255,255,255,0.25) !important;
+}
+
+/* 5. Architecture Node Text Contrast */
+.architecture-node-3d text {
+  /* Add text shadow for better contrast on colored backgrounds */
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.8) !important;
+  font-weight: 700 !important;
+}
+
+/* === MEDIUM PRIORITY FIXES === */
+
+/* 6. Enhanced Focus Indicators */
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible {
+  outline: 3px solid #4ade80 !important;
+  outline-offset: 2px !important;
+  border-radius: 4px;
+}
+
+/* 7. Resource Links Gradient Contrast */
+.resource-link {
+  /* Add text shadow for better contrast on gradient */
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.7) !important;
+  font-weight: 600 !important;
+}
+
+.resource-link:focus-visible {
+  outline: 3px solid #fff !important;
+  outline-offset: 3px !important;
+}
+
+/* 8. Terminal Content - Already good but ensure consistency */
+.terminal-content,
+.code-content {
+  /* Ensure high contrast is maintained */
+  background: #0d1117 !important;
+  color: #58a6ff !important; /* GitHub blue for better contrast */
+}
+
+/* 9. Form Success/Error States */
+.form-group.error input {
+  border-color: #ff6b6b !important;
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.3) !important;
+}
+
+.form-group.success input {
+  border-color: #51cf66 !important;
+  box-shadow: 0 0 0 3px rgba(81, 207, 102, 0.3) !important;
+}
+
+/* === HIGH CONTRAST MODE SUPPORT === */
+
+@media (prefers-contrast: high) {
+  /* Override styles for high contrast preference */
+  
+  body {
+    background: #000 !important;
+    color: #fff !important;
+  }
+  
+  .hero-section {
+    background: #000 !important;
+    color: #fff !important;
+  }
+  
+  .hero-title,
+  .hero-subtitle {
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    -webkit-text-fill-color: initial !important;
+    color: #fff !important;
+    text-shadow: none !important;
+  }
+  
+  .form-group input,
+  .form-group select {
+    background: #000 !important;
+    color: #fff !important;
+    border: 3px solid #fff !important;
+  }
+  
+  .form-group input::placeholder {
+    color: #ccc !important;
+  }
+  
+  .primary-cta,
+  .secondary-cta,
+  .resource-link {
+    background: #fff !important;
+    color: #000 !important;
+    border: 3px solid #000 !important;
+  }
+  
+  .explanation-card,
+  .architecture-component,
+  .timeline-step,
+  .demo-carousel {
+    background: #000 !important;
+    border: 3px solid #fff !important;
+  }
+  
+  /* Architecture nodes with high contrast */
+  .architecture-node-3d {
+    stroke: #fff !important;
+    stroke-width: 3 !important;
+  }
+  
+  .connection-line {
+    stroke: #fff !important;
+    stroke-width: 2 !important;
+  }
+}
+
+/* === REDUCED MOTION RESPECT === */
+
+@media (prefers-reduced-motion: reduce) {
+  /* Ensure animations don't interfere with readability */
+  
+  .hero-section {
+    animation: none !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  }
+  
+  .architecture-node-3d,
+  .connection-line,
+  .timeline-step {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  /* Keep focus animations for accessibility */
+  *:focus-visible {
+    transition: outline 0.2s ease !important;
+  }
+}
+
+/* === COLOR BLIND FRIENDLY IMPROVEMENTS === */
+
+/* Use patterns/shapes alongside colors for better accessibility */
+.legend-item::before {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-left: 8px;
+  border: 2px solid currentColor;
+}
+
+.legend-item[data-type="core"]::before {
+  border-radius: 50%;
+}
+
+.legend-item[data-type="service"]::before {
+  border-radius: 0;
+}
+
+.legend-item[data-type="feature"]::before {
+  border-radius: 50%;
+  transform: rotate(45deg);
+}
+
+.legend-item[data-type="external"]::before {
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.legend-item[data-type="mcp"]::before {
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+}
+
+/* === LOADING STATES WITH BETTER CONTRAST === */
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 999;
+}
+
+.spinner {
+  border: 3px solid rgba(255,255,255,0.3);
+  border-top: 3px solid #4ade80; /* Higher contrast color */
+}
+
+/* === MOBILE TOUCH TARGET IMPROVEMENTS === */
+
+@media (max-width: 768px) {
+  /* Ensure all interactive elements meet 44px minimum */
+  
+  button,
+  a[role="button"],
+  .carousel-btn,
+  .architecture-node-3d {
+    min-width: 44px !important;
+    min-height: 44px !important;
+  }
+  
+  .terminal-btn {
+    min-width: 44px !important;
+    min-height: 44px !important;
+    padding: 12px !important;
+  }
+}
+
+/* === ERROR STATES AND FEEDBACK === */
+
+.error-message {
+  background: #ff6b6b !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8) !important;
+}
+
+.success-message {
+  background: #51cf66 !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8) !important;
+}
+
+/* === SKIP LINKS FOR SCREEN READERS === */
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 0 0 4px 4px;
+  z-index: 10000;
+  transform: translateY(-100%);
+  transition: transform 0.3s ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0%);
+}
+
+/* === PRINT STYLES (ACCESSIBILITY) === */
+
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  
+  .hero-section,
+  .demo-section,
+  .timeline-demo-section {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  
+  .hero-title,
+  .section-title {
+    color: #000 !important;
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    -webkit-text-fill-color: initial !important;
+  }
+  
+  /* Hide decorative elements in print */
+  .architecture-svg,
+  .particle-background,
+  .spinner {
+    display: none !important;
+  }
+}
+
+/* =================================================================
+   IMPLEMENTATION NOTES:
+   
+   1. Apply these styles after your main stylesheet
+   2. Test with browser dev tools accessibility features
+   3. Use automated testing tools like axe-core
+   4. Manual testing with screen readers recommended
+   5. Consider user testing with actual accessibility needs
+   
+   Priority order:
+   - High contrast fixes (forms, buttons, text)
+   - Focus indicators 
+   - High contrast mode support
+   - Color blind improvements
+   - Mobile touch targets
+   ================================================================= */

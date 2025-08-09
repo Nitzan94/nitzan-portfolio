@@ -1,6 +1,13 @@
 import React, { useState } from 'react'
+import UniversalEditableText from './UniversalEditableText'
+import { useEditMode } from '../hooks/useEditMode'
+import useContentManager from '../hooks/useContentManager'
 
 function LeadForm() {
+  // Add edit mode functionality
+  const { isEditMode } = useEditMode()
+  const { updateContent, updateColor, getColor } = useContentManager()
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -36,23 +43,79 @@ function LeadForm() {
       <div className="lead-form-container submitted">
         <div className="success-message">
           <div className="success-icon">🎉</div>
-          <h2>מעולה!</h2>
-          <p>הפנייתך נשלחה בהצלחה</p>
-          <p>אשלח לך משאבים וקישורים לקוד המקור בתוך 24 שעות</p>
+          <UniversalEditableText
+            id="lead-success-title"
+            defaultValue="מעולה!"
+            defaultColor={getColor('lead-success-title', '#ffffff')}
+            tag="h2"
+            isEditMode={isEditMode}
+            onUpdate={updateContent}
+            onColorUpdate={updateColor}
+          />
+          <UniversalEditableText
+            id="lead-success-msg1"
+            defaultValue="הפנייתך נשלחה בהצלחה"
+            defaultColor={getColor('lead-success-msg1', '#ffffff')}
+            tag="p"
+            isEditMode={isEditMode}
+            onUpdate={updateContent}
+            onColorUpdate={updateColor}
+          />
+          <UniversalEditableText
+            id="lead-success-msg2"
+            defaultValue="אשלח לך משאבים וקישורים לקוד המקור בתוך 24 שעות"
+            defaultColor={getColor('lead-success-msg2', '#ffffff')}
+            tag="p"
+            isEditMode={isEditMode}
+            onUpdate={updateContent}
+            onColorUpdate={updateColor}
+          />
           <div className="next-steps">
-            <h3>מה קורה הלאה?</h3>
+            <UniversalEditableText
+              id="lead-next-steps-title"
+              defaultValue="מה קורה הלאה?"
+              defaultColor={getColor('lead-next-steps-title', '#ffffff')}
+              tag="h3"
+              isEditMode={isEditMode}
+              onUpdate={updateContent}
+              onColorUpdate={updateColor}
+            />
             <div className="steps-list">
               <div className="step">
                 <span className="step-number">1</span>
-                <span>אשלח לך קישורים לקוד המקור ומדריכים</span>
+                <UniversalEditableText
+                  id="lead-step-1"
+                  defaultValue="אשלח לך קישורים לקוד המקור ומדריכים"
+                  defaultColor={getColor('lead-step-1', '#ffffff')}
+                  tag="span"
+                  isEditMode={isEditMode}
+                  onUpdate={updateContent}
+                  onColorUpdate={updateColor}
+                />
               </div>
               <div className="step">
                 <span className="step-number">2</span>
-                <span>נמצא את האופציה הטובה ביותר ללמוד יחד</span>
+                <UniversalEditableText
+                  id="lead-step-2"
+                  defaultValue="נמצא את האופציה הטובה ביותר ללמוד יחד"
+                  defaultColor={getColor('lead-step-2', '#ffffff')}
+                  tag="span"
+                  isEditMode={isEditMode}
+                  onUpdate={updateContent}
+                  onColorUpdate={updateColor}
+                />
               </div>
               <div className="step">
                 <span className="step-number">3</span>
-                <span>נתחיל לשתף פעולה ולפתח פרויקטים</span>
+                <UniversalEditableText
+                  id="lead-step-3"
+                  defaultValue="נתחיל לשתף פעולה ולפתח פרויקטים"
+                  defaultColor={getColor('lead-step-3', '#ffffff')}
+                  tag="span"
+                  isEditMode={isEditMode}
+                  onUpdate={updateContent}
+                  onColorUpdate={updateColor}
+                />
               </div>
             </div>
           </div>
@@ -64,21 +127,61 @@ function LeadForm() {
   return (
     <div className="lead-form-container">
       <div className="form-header">
-        <h2>📚 רוצה ללמוד איך לבנות מערכות כאלה?</h2>
-        <p>אשמח לשתף את הידע ולעזור לך להתחיל עם המתודולוגיה הזאת</p>
+        <UniversalEditableText
+          id="lead-form-title"
+          defaultValue="📚 רוצה ללמוד איך לבנות מערכות כאלה?"
+          defaultColor={getColor('lead-form-title', '#ffffff')}
+          tag="h2"
+          isEditMode={isEditMode}
+          onUpdate={updateContent}
+          onColorUpdate={updateColor}
+        />
+        <UniversalEditableText
+          id="lead-form-subtitle"
+          defaultValue="אשמח לשתף את הידע ולעזור לך להתחיל עם המתודולוגיה הזאת"
+          defaultColor={getColor('lead-form-subtitle', '#ffffff')}
+          tag="p"
+          isEditMode={isEditMode}
+          onUpdate={updateContent}
+          onColorUpdate={updateColor}
+        />
         
         <div className="value-props">
           <div className="value-prop">
             <span className="icon">📝</span>
-            <span>קוד מקור ומדריכים</span>
+            <UniversalEditableText
+              id="value-prop-1"
+              defaultValue="קוד מקור ומדריכים"
+              defaultColor={getColor('value-prop-1', '#ffffff')}
+              tag="span"
+              isEditMode={isEditMode}
+              onUpdate={updateContent}
+              onColorUpdate={updateColor}
+            />
           </div>
           <div className="value-prop">
             <span className="icon">🎓</span>
-            <span>למידה עם דוגמאות</span>
+            <UniversalEditableText
+              id="value-prop-2"
+              defaultValue="למידה עם דוגמאות"
+              defaultColor={getColor('value-prop-2', '#ffffff')}
+              tag="span"
+              isEditMode={isEditMode}
+              onUpdate={updateContent}
+              onColorUpdate={updateColor}
+            />
           </div>
           <div className="value-prop">
             <span className="icon">🤝</span>
-            <span>שיתוף ידע וניסיון</span>
+            <UniversalEditableText
+              id="value-prop-3"
+              defaultValue="שיתוף ידע וניסיון"
+              defaultColor={getColor('value-prop-3', '#ffffff')}
+              tag="span"
+              isEditMode={isEditMode}
+              onUpdate={updateContent}
+              onColorUpdate={updateColor}
+            />
           </div>
         </div>
       </div>

@@ -8,8 +8,12 @@ import Enhanced3DArchitecture from '../components/Enhanced3DArchitecture'
 import LeadForm from '../components/LeadForm'
 import EnhancedTimeline from '../components/EnhancedTimeline'
 import EditableText from '../components/EditableText'
+import UniversalEditableText from '../components/UniversalEditableText'
 import AdminPanel from '../components/AdminPanel'
+import GlobalEditPanel from '../components/GlobalEditPanel'
+import ContentControlPanel from '../components/ContentControlPanel'
 import { useEditMode } from '../hooks/useEditMode'
+import useContentManager from '../hooks/useContentManager'
 
 function Home() {
   const navigate = useNavigate()
@@ -32,6 +36,18 @@ function Home() {
     saveChanges,
     resetChanges
   } = useEditMode()
+  
+  // Content management
+  const {
+    content,
+    colors,
+    updateContent,
+    updateColor,
+    getText: getContentText,
+    getColor,
+    exportContent,
+    importContent
+  } = useContentManager()
 
   return (
     <div className="portfolio-home">
@@ -70,21 +86,24 @@ function Home() {
                 getValue={getText}
               />
             </button>
-            <a 
+            <button 
               className="secondary-cta"
-              href="https://github.com/nitzankahana/nitzan-portfolio"
-              target="_blank"
-              rel="noopener noreferrer"
+              onClick={() => {
+                const timelineSection = document.querySelector('.timeline-demo-section')
+                if (timelineSection) {
+                  timelineSection.scrollIntoView({ behavior: 'smooth' })
+                }
+              }}
             >
               <EditableText
                 id="secondary-cta-text"
-                defaultValue="📖 קוד מקור ותיעוד"
+                defaultValue="🔮 איך זה עובד?"
                 tag="span"
                 isEditMode={isEditMode}
                 onUpdate={updateText}
                 getValue={getText}
               />
-            </a>
+            </button>
           </div>
         </div>
       </section>
@@ -150,34 +169,138 @@ function Home() {
         {/* Paradigm Shift Explanation */}
         <div className="paradigm-shift">
           <div className="shift-explanation">
-            <h3>השינוי האמיתי באופן שבו אנחנו מפתחים:</h3>
+            <UniversalEditableText
+              id="paradigm-shift-title"
+              defaultValue="השינוי האמיתי באופן שבו אנחנו מפתחים:"
+              defaultColor={getColor('paradigm-shift-title', '#ffffff')}
+              tag="h3"
+              isEditMode={isEditMode}
+              onUpdate={updateContent}
+              onColorUpdate={updateColor}
+            />
             <div className="before-after">
               <div className="before">
-                <h4>👨‍💻 לפני - כתיבת קוד מנואלית</h4>
+                <UniversalEditableText
+                  id="before-title"
+                  defaultValue="👨‍💻 לפני - כתיבת קוד מנואלית"
+                  defaultColor={getColor('before-title', '#ffffff')}
+                  tag="h4"
+                  isEditMode={isEditMode}
+                  onUpdate={updateContent}
+                  onColorUpdate={updateColor}
+                />
                 <ul>
-                  <li>חושב מה אני רוצה</li>
-                  <li>כותב קוד שורה אחר שורה</li>
-                  <li>מתקן באגים ונלחם עם קונפיגים</li>
-                  <li>מוצא פתרונות ב-Google/Stack Overflow</li>
+                  <UniversalEditableText
+                    id="before-item-1"
+                    defaultValue="חושב מה אני רוצה"
+                    defaultColor={getColor('before-item-1', '#ffffff')}
+                    tag="li"
+                    isEditMode={isEditMode}
+                    onUpdate={updateContent}
+                    onColorUpdate={updateColor}
+                  />
+                  <UniversalEditableText
+                    id="before-item-2"
+                    defaultValue="כותב קוד שורה אחר שורה"
+                    defaultColor={getColor('before-item-2', '#ffffff')}
+                    tag="li"
+                    isEditMode={isEditMode}
+                    onUpdate={updateContent}
+                    onColorUpdate={updateColor}
+                  />
+                  <UniversalEditableText
+                    id="before-item-3"
+                    defaultValue="מתקן באגים ונלחם עם קונפיגים"
+                    defaultColor={getColor('before-item-3', '#ffffff')}
+                    tag="li"
+                    isEditMode={isEditMode}
+                    onUpdate={updateContent}
+                    onColorUpdate={updateColor}
+                  />
+                  <UniversalEditableText
+                    id="before-item-4"
+                    defaultValue="מוצא פתרונות ב-Google/Stack Overflow"
+                    defaultColor={getColor('before-item-4', '#ffffff')}
+                    tag="li"
+                    isEditMode={isEditMode}
+                    onUpdate={updateContent}
+                    onColorUpdate={updateColor}
+                  />
                 </ul>
               </div>
               <div className="after">
-                <h4>עכשיו - שיחה עם המחשב 🤖</h4>
+                <UniversalEditableText
+                  id="after-title"
+                  defaultValue="עכשיו - שיחה עם המחשב 🤖"
+                  defaultColor={getColor('after-title', '#ffffff')}
+                  tag="h4"
+                  isEditMode={isEditMode}
+                  onUpdate={updateContent}
+                  onColorUpdate={updateColor}
+                />
                 <ul>
-                  <li>מבין מה אני רוצה ומסביר למחשב</li>
-                  <li>המחשב כותב את הקוד באיכות גבוהה</li>
-                  <li>המחשב מסדר גם את כל הקונפיגים</li>
-                  <li>המחשב יודע את כל הפתרונות מראש</li>
+                  <UniversalEditableText
+                    id="after-item-1"
+                    defaultValue="מבין מה אני רוצה ומסביר למחשב"
+                    defaultColor={getColor('after-item-1', '#ffffff')}
+                    tag="li"
+                    isEditMode={isEditMode}
+                    onUpdate={updateContent}
+                    onColorUpdate={updateColor}
+                  />
+                  <UniversalEditableText
+                    id="after-item-2"
+                    defaultValue="המחשב כותב את הקוד באיכות גבוהה"
+                    defaultColor={getColor('after-item-2', '#ffffff')}
+                    tag="li"
+                    isEditMode={isEditMode}
+                    onUpdate={updateContent}
+                    onColorUpdate={updateColor}
+                  />
+                  <UniversalEditableText
+                    id="after-item-3"
+                    defaultValue="המחשב מסדר גם את כל הקונפיגים"
+                    defaultColor={getColor('after-item-3', '#ffffff')}
+                    tag="li"
+                    isEditMode={isEditMode}
+                    onUpdate={updateContent}
+                    onColorUpdate={updateColor}
+                  />
+                  <UniversalEditableText
+                    id="after-item-4"
+                    defaultValue="המחשב יודע את כל הפתרונות מראש"
+                    defaultColor={getColor('after-item-4', '#ffffff')}
+                    tag="li"
+                    isEditMode={isEditMode}
+                    onUpdate={updateContent}
+                    onColorUpdate={updateColor}
+                  />
                 </ul>
               </div>
             </div>
             <div className="key-insight">
-              <p>💡 <strong>התובנה המרכזית:</strong> אני עדיין מפתח, אבל עכשיו אני מתמקד בלקבל החלטות אסטרטגיות, ולא בכתיבת קוד שגרה.</p>
+              <UniversalEditableText
+                id="key-insight-text"
+                defaultValue="💡 התובנה המרכזית: אני עדיין מפתח, אבל עכשיו אני מתמקד בלקבל החלטות אסטרטגיות, ולא בכתיבת קוד שגרה."
+                defaultColor={getColor('key-insight-text', '#ffffff')}
+                tag="p"
+                isEditMode={isEditMode}
+                onUpdate={updateContent}
+                onColorUpdate={updateColor}
+              />
             </div>
             
             {/* Quick Links to Resources */}
             <div className="quick-resources">
-              <h4>🔗 משאבים ללמידה:</h4>
+              <UniversalEditableText
+                id="quick-resources-title"
+                defaultValue="🔗 משאבים ללמידה:"
+                defaultColor={getColor('quick-resources-title', '#ffffff')}
+                tag="h4"
+                isEditMode={isEditMode}
+                onUpdate={updateContent}
+                onColorUpdate={updateColor}
+              />
               <div className="resource-links">
                 <a href="https://github.com/nitzankahana/nitzan-portfolio" target="_blank" rel="noopener noreferrer" className="resource-link">
                   💻 קוד המקור של האתר הזה
@@ -201,47 +324,136 @@ function Home() {
       <section className="metrics-section">
         <EditableText
           id="metrics-title"
-          defaultValue="🛠️ רכיבי המערכת המרכזיים"
+          defaultValue="🏗️ הארכיטקטורה המטורפת"
           tag="h2"
+          className="metrics-title"
           isEditMode={isEditMode}
           onUpdate={updateText}
           getValue={getText}
         />
-        <div className="metrics-grid">
-          <MetricsCard 
-            title="שורות אוטומציה"
-            value={metrics.automation.value}
-            unit="Lines Code"
-            icon="⚡"
-            trend="Quality First"
+        <div className="metrics-subtitle">
+          <EditableText
+            id="metrics-subtitle"
+            defaultValue="כך בניתי תשתית שהופכת Claude Code ממטרד עוזר לכלי שמכפיל את הפרודוקטיביות שלי פי 100"
+            tag="p"
+            className="metrics-subtitle"
+            isEditMode={isEditMode}
+            onUpdate={updateText}
+            getValue={getText}
           />
-          <MetricsCard 
-            title="MCP Servers"
-            value={metrics.servers.value}
-            unit="Active Plugins"
-            icon="🖥️"
-            trend="Modular"
-          />
-          <MetricsCard 
-            title="Project Templates"
-            value={metrics.templates.value}
-            unit="Ready to Use"
-            icon="📋"
-            trend="Production Ready"
-          />
-          <MetricsCard 
-            title="Built Projects"
-            value={metrics.projects.value}
-            unit="Successfully"
-            icon="🎯"
-            trend="Zero Errors"
-          />
+        </div>
+        
+        <div className="architecture-container">
+          <div className="architecture-grid">
+            <div className="architecture-component">
+              <div className="component-icon">🔗</div>
+              <UniversalEditableText
+                id="mcp-servers-title"
+                defaultValue="MCP Servers Network"
+                defaultColor={getColor('mcp-servers-title', '#ffffff')}
+                tag="div"
+                className="component-title"
+                isEditMode={isEditMode}
+                onUpdate={updateContent}
+                onColorUpdate={updateColor}
+              />
+              <UniversalEditableText
+                id="mcp-servers-desc"
+                defaultValue="גשר בין Claude Code לכל המערכות: GitHub, Vercel, מערכת קבצים, ועוד 4 שכבות שמאפשרות עבודה בקצב הזה"
+                defaultColor={getColor('mcp-servers-desc', '#ffffff')}
+                tag="div"
+                className="component-description"
+                isEditMode={isEditMode}
+                onUpdate={updateContent}
+                onColorUpdate={updateColor}
+              />
+            </div>
+            
+            <div className="architecture-component">
+              <div className="component-icon">📦</div>
+              <UniversalEditableText
+                id="templates-title"
+                defaultValue="Templates Registry"
+                defaultColor={getColor('templates-title', '#ffffff')}
+                tag="div"
+                className="component-title"
+                isEditMode={isEditMode}
+                onUpdate={updateContent}
+                onColorUpdate={updateColor}
+              />
+              <UniversalEditableText
+                id="templates-desc"
+                defaultValue="תבניות מוכנות שהפכו 3 שבועות עבודה ל-30 שניות. כל תבנית כוללת הכל: קוד, בדיקות, אבטחה, deployment"
+                defaultColor={getColor('templates-desc', '#ffffff')}
+                tag="div"
+                className="component-description"
+                isEditMode={isEditMode}
+                onUpdate={updateContent}
+                onColorUpdate={updateColor}
+              />
+            </div>
+            
+            <div className="architecture-component">
+              <div className="component-icon">⚙️</div>
+              <UniversalEditableText
+                id="automation-title"
+                defaultValue="Automation Pipeline"
+                defaultColor={getColor('automation-title', '#ffffff')}
+                tag="div"
+                className="component-title"
+                isEditMode={isEditMode}
+                onUpdate={updateContent}
+                onColorUpdate={updateColor}
+              />
+              <UniversalEditableText
+                id="automation-desc"
+                defaultValue="סקריפטים שרצים ברקע ודואגים שהכל עובד מושלם: הקמה, בדיקות, deployment - הכל אוטומטי"
+                defaultColor={getColor('automation-desc', '#ffffff')}
+                tag="div"
+                className="component-description"
+                isEditMode={isEditMode}
+                onUpdate={updateContent}
+                onColorUpdate={updateColor}
+              />
+            </div>
+            
+            <div className="architecture-component">
+              <div className="component-icon">✅</div>
+              <UniversalEditableText
+                id="quality-gates-title"
+                defaultValue="Quality Gates"
+                defaultColor={getColor('quality-gates-title', '#ffffff')}
+                tag="div"
+                className="component-title"
+                isEditMode={isEditMode}
+                onUpdate={updateContent}
+                onColorUpdate={updateColor}
+              />
+              <UniversalEditableText
+                id="quality-gates-desc"
+                defaultValue="מערכת שמבטיחה שכל פרויקט יוצא ברמת enterprise: בדיקות אוטומטיות, אבטחה, ביצועים"
+                defaultColor={getColor('quality-gates-desc', '#ffffff')}
+                tag="div"
+                className="component-description"
+                isEditMode={isEditMode}
+                onUpdate={updateContent}
+                onColorUpdate={updateColor}
+              />
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Interactive Demos */}
       <section id="demo-section" className="demo-section">
-        <h2>💻 הדגמות אינטרקטיביות</h2>
+        <EditableText
+          id="demo-section-title"
+          defaultValue="💻 הדגמות אינטרקטיביות"
+          tag="h2"
+          isEditMode={isEditMode}
+          onUpdate={updateText}
+          getValue={getText}
+        />
         <DemoCarousel currentDemo={currentDemo} setCurrentDemo={setCurrentDemo} />
         
         <div className="terminal-container">
@@ -279,13 +491,138 @@ function Home() {
         </div>
       </section>
 
-      {/* Build Process Timeline */}
+      {/* Interactive Timeline Demo - One Command Creates Full Project */}
+      <section className="timeline-demo-section">
+        <div className="timeline-header">
+          <EditableText
+            id="timeline-demo-title"
+            defaultValue="✨ הקסם האמיתי: פקודה אחת, פרויקט שלם"
+            tag="h2"
+            isEditMode={isEditMode}
+            onUpdate={updateText}
+            getValue={getText}
+          />
+          <EditableText
+            id="timeline-demo-subtitle"
+            defaultValue="איך המערכת הופכת רעיון לפרויקט מושלם תוך דקות ספורות"
+            tag="p"
+            className="timeline-subtitle"
+            isEditMode={isEditMode}
+            onUpdate={updateText}
+            getValue={getText}
+          />
+        </div>
+        
+        <div className="magic-timeline">
+          <div className="timeline-step">
+            <div className="step-icon">🎯</div>
+            <div className="step-content">
+              <EditableText
+                id="step-1-title"
+                defaultValue="שלב 1: הבנת הבקשה"
+                tag="h3"
+                isEditMode={isEditMode}
+                onUpdate={updateText}
+                getValue={getText}
+              />
+              <EditableText
+                id="step-1-desc"
+                defaultValue="המערכת מנתחת את הבקשה ומזהה שאני רוצה אתר portfolio מקצועי"
+                tag="p"
+                isEditMode={isEditMode}
+                onUpdate={updateText}
+                getValue={getText}
+              />
+              <div className="step-code">claude-code "אני רוצה אתר portfolio מרשים"</div>
+            </div>
+          </div>
+          
+          <div className="timeline-step">
+            <div className="step-icon">🏗️</div>
+            <div className="step-content">
+              <EditableText
+                id="step-2-title"
+                defaultValue="שלב 2: בחירת ארכיטקטורה"
+                tag="h3"
+                isEditMode={isEditMode}
+                onUpdate={updateText}
+                getValue={getText}
+              />
+              <EditableText
+                id="step-2-desc"
+                defaultValue="בחירה אוטומטית של React + TypeScript + Vite על בסיס best practices"
+                tag="p"
+                isEditMode={isEditMode}
+                onUpdate={updateText}
+                getValue={getText}
+              />
+              <div className="step-code">✓ React 18 + TypeScript ✓ Vite ✓ Modern CSS</div>
+            </div>
+          </div>
+          
+          <div className="timeline-step">
+            <div className="step-icon">🎨</div>
+            <div className="step-content">
+              <EditableText
+                id="step-3-title"
+                defaultValue="שלב 3: יצירת קוד מקצועי"
+                tag="h3"
+                isEditMode={isEditMode}
+                onUpdate={updateText}
+                getValue={getText}
+              />
+              <EditableText
+                id="step-3-desc"
+                defaultValue="כתיבה של components מודולריים, responsive design, ואנימציות חלקות"
+                tag="p"
+                isEditMode={isEditMode}
+                onUpdate={updateText}
+                getValue={getText}
+              />
+              <div className="step-code">+ 15 קומפוננטים + CSS מתקדם + אינטראקטיביות</div>
+            </div>
+          </div>
+          
+          <div className="timeline-step">
+            <div className="step-icon">🚀</div>
+            <div className="step-content">
+              <EditableText
+                id="step-4-title"
+                defaultValue="שלב 4: Deploy אוטומטי"
+                tag="h3"
+                isEditMode={isEditMode}
+                onUpdate={updateText}
+                getValue={getText}
+              />
+              <EditableText
+                id="step-4-desc"
+                defaultValue="העלאה לגיט, קונפיגרציית Vercel, והפעלת CI/CD pipeline"
+                tag="p"
+                isEditMode={isEditMode}
+                onUpdate={updateText}
+                getValue={getText}
+              />
+              <div className="step-code">→ GitHub → Vercel → Live Site ✅</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Enhanced Timeline Component */}
       <EnhancedTimeline />
 
       {/* Architecture Overview */}
       <section className="architecture-section">
         <div className="architecture-header">
-          <h2>🏗️ ארכיטקטורת המערכת המתקדמת</h2>
+          <UniversalEditableText
+            id="architecture-header-title"
+            defaultValue="🏗️ ארכיטקטורת המערכת המתקדמת"
+            defaultColor={getColor('architecture-header-title', '#ffffff')}
+            tag="h2"
+            isEditMode={isEditMode}
+            onUpdate={updateContent}
+            onColorUpdate={updateColor}
+          />
           <button 
             className="detailed-view-btn"
             onClick={() => navigate('/architecture')}
@@ -298,24 +635,80 @@ function Home() {
 
       {/* Learning Resources & Open Source */}
       <section className="resources-section">
-        <h2>📚 משאבים ללמידה וקוד מקור</h2>
+        <UniversalEditableText
+          id="resources-section-title"
+          defaultValue="📚 משאבים ללמידה וקוד מקור"
+          defaultColor={getColor('resources-section-title', '#ffffff')}
+          tag="h2"
+          isEditMode={isEditMode}
+          onUpdate={updateContent}
+          onColorUpdate={updateColor}
+        />
         <div className="resources-grid">
           <div className="resource-card">
             <div className="resource-icon">💻</div>
-            <h3>קוד המקור של האתר הזה</h3>
-            <p>האתר שאתם רואים עכשיו זמין בGitHub עם כל הקומפוננטים והאינטראקטיביות</p>
+            <UniversalEditableText
+              id="resource-1-title"
+              defaultValue="קוד המקור של האתר הזה"
+              defaultColor={getColor('resource-1-title', '#ffffff')}
+              tag="h3"
+              isEditMode={isEditMode}
+              onUpdate={updateContent}
+              onColorUpdate={updateColor}
+            />
+            <UniversalEditableText
+              id="resource-1-desc"
+              defaultValue="האתר שאתם רואים עכשיו זמין בGitHub עם כל הקומפוננטים והאינטראקטיביות"
+              defaultColor={getColor('resource-1-desc', '#ffffff')}
+              tag="p"
+              isEditMode={isEditMode}
+              onUpdate={updateContent}
+              onColorUpdate={updateColor}
+            />
             <a href="#github-repo" className="resource-link">🔗 GitHub Repository</a>
           </div>
           <div className="resource-card">
             <div className="resource-icon">⚙️</div>
-            <h3>MCP קונפיגורציות</h3>
-            <p>7 שרתי MCP מוכנים לשימוש עם מדריכי התקנה מפורטים</p>
+            <UniversalEditableText
+              id="resource-2-title"
+              defaultValue="MCP קונפיגורציות"
+              defaultColor={getColor('resource-2-title', '#ffffff')}
+              tag="h3"
+              isEditMode={isEditMode}
+              onUpdate={updateContent}
+              onColorUpdate={updateColor}
+            />
+            <UniversalEditableText
+              id="resource-2-desc"
+              defaultValue="7 שרתי MCP מוכנים לשימוש עם מדריכי התקנה מפורטים"
+              defaultColor={getColor('resource-2-desc', '#ffffff')}
+              tag="p"
+              isEditMode={isEditMode}
+              onUpdate={updateContent}
+              onColorUpdate={updateColor}
+            />
             <a href="#mcp-configs" className="resource-link">📝 תצורות MCP</a>
           </div>
           <div className="resource-card">
             <div className="resource-icon">🛠️</div>
-            <h3>סקריפטי אוטומציה</h3>
-            <p>4,000+ שורות סקריפטים לאוטומציה של משימות פיתוח</p>
+            <UniversalEditableText
+              id="resource-3-title"
+              defaultValue="סקריפטי אוטומציה"
+              defaultColor={getColor('resource-3-title', '#ffffff')}
+              tag="h3"
+              isEditMode={isEditMode}
+              onUpdate={updateContent}
+              onColorUpdate={updateColor}
+            />
+            <UniversalEditableText
+              id="resource-3-desc"
+              defaultValue="4,000+ שורות סקריפטים לאוטומציה של משימות פיתוח"
+              defaultColor={getColor('resource-3-desc', '#ffffff')}
+              tag="p"
+              isEditMode={isEditMode}
+              onUpdate={updateContent}
+              onColorUpdate={updateColor}
+            />
             <a href="#automation-scripts" className="resource-link">⚡ סקריפטי Bash</a>
           </div>
         </div>
@@ -323,34 +716,106 @@ function Home() {
         {/* Technical Implementation Guide */}
         <div className="implementation-guide">
           <div className="guide-content">
-            <h3>🧠 איך לבנות מערכת דומה?</h3>
+            <UniversalEditableText
+              id="implementation-guide-title"
+              defaultValue="🧠 איך לבנות מערכת דומה?"
+              defaultColor={getColor('implementation-guide-title', '#ffffff')}
+              tag="h3"
+              isEditMode={isEditMode}
+              onUpdate={updateContent}
+              onColorUpdate={updateColor}
+            />
             <div className="implementation-steps">
               <div className="step-card">
                 <div className="step-number">1</div>
                 <div className="step-content">
-                  <h4>התקנת Claude Code + MCP</h4>
-                  <p>התחלה עם התקנת Claude Code ושרתי MCP בסיסיים</p>
+                  <UniversalEditableText
+                    id="impl-step-1-title"
+                    defaultValue="התקנת Claude Code + MCP"
+                    defaultColor={getColor('impl-step-1-title', '#ffffff')}
+                    tag="h4"
+                    isEditMode={isEditMode}
+                    onUpdate={updateContent}
+                    onColorUpdate={updateColor}
+                  />
+                  <UniversalEditableText
+                    id="impl-step-1-desc"
+                    defaultValue="התחלה עם התקנת Claude Code ושרתי MCP בסיסיים"
+                    defaultColor={getColor('impl-step-1-desc', '#ffffff')}
+                    tag="p"
+                    isEditMode={isEditMode}
+                    onUpdate={updateContent}
+                    onColorUpdate={updateColor}
+                  />
                 </div>
               </div>
               <div className="step-card">
                 <div className="step-number">2</div>
                 <div className="step-content">
-                  <h4>בניית סקריפטי אוטומציה</h4>
-                  <p>פיתוח סקריפטים למשימות חוזרות בתהליך הפיתוח</p>
+                  <UniversalEditableText
+                    id="impl-step-2-title"
+                    defaultValue="בניית סקריפטי אוטומציה"
+                    defaultColor={getColor('impl-step-2-title', '#ffffff')}
+                    tag="h4"
+                    isEditMode={isEditMode}
+                    onUpdate={updateContent}
+                    onColorUpdate={updateColor}
+                  />
+                  <UniversalEditableText
+                    id="impl-step-2-desc"
+                    defaultValue="פיתוח סקריפטים למשימות חוזרות בתהליך הפיתוח"
+                    defaultColor={getColor('impl-step-2-desc', '#ffffff')}
+                    tag="p"
+                    isEditMode={isEditMode}
+                    onUpdate={updateContent}
+                    onColorUpdate={updateColor}
+                  />
                 </div>
               </div>
               <div className="step-card">
                 <div className="step-number">3</div>
                 <div className="step-content">
-                  <h4>אינטגרציות חשכים</h4>
-                  <p>חיבור עם GitHub, Vercel, וכלים נוספים</p>
+                  <UniversalEditableText
+                    id="impl-step-3-title"
+                    defaultValue="אינטגרציות חשכים"
+                    defaultColor={getColor('impl-step-3-title', '#ffffff')}
+                    tag="h4"
+                    isEditMode={isEditMode}
+                    onUpdate={updateContent}
+                    onColorUpdate={updateColor}
+                  />
+                  <UniversalEditableText
+                    id="impl-step-3-desc"
+                    defaultValue="חיבור עם GitHub, Vercel, וכלים נוספים"
+                    defaultColor={getColor('impl-step-3-desc', '#ffffff')}
+                    tag="p"
+                    isEditMode={isEditMode}
+                    onUpdate={updateContent}
+                    onColorUpdate={updateColor}
+                  />
                 </div>
               </div>
               <div className="step-card">
                 <div className="step-number">4</div>
                 <div className="step-content">
-                  <h4>הרחבה ושיפור</h4>
-                  <p>התאמה אישית לתהליכי העבודה שלכם</p>
+                  <UniversalEditableText
+                    id="impl-step-4-title"
+                    defaultValue="הרחבה ושיפור"
+                    defaultColor={getColor('impl-step-4-title', '#ffffff')}
+                    tag="h4"
+                    isEditMode={isEditMode}
+                    onUpdate={updateContent}
+                    onColorUpdate={updateColor}
+                  />
+                  <UniversalEditableText
+                    id="impl-step-4-desc"
+                    defaultValue="התאמה אישית לתהליכי העבודה שלכם"
+                    defaultColor={getColor('impl-step-4-desc', '#ffffff')}
+                    tag="p"
+                    isEditMode={isEditMode}
+                    onUpdate={updateContent}
+                    onColorUpdate={updateColor}
+                  />
                 </div>
               </div>
             </div>
@@ -370,6 +835,16 @@ function Home() {
         onToggleEditMode={toggleEditMode}
         onSaveChanges={saveChanges}
         onResetChanges={resetChanges}
+      />
+      
+      {/* Global Edit Panel */}
+      <GlobalEditPanel isEditMode={isEditMode} />
+      
+      {/* Content Control Panel */}
+      <ContentControlPanel 
+        isEditMode={isEditMode}
+        onExport={exportContent}
+        onImport={importContent}
       />
 
       {/* Edit Mode Indicator */}

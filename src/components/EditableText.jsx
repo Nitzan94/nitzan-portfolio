@@ -13,10 +13,12 @@ function EditableText({
 }) {
   const [isEditing, setIsEditing] = useState(false)
   const [tempValue, setTempValue] = useState('')
+  const [tempColor, setTempColor] = useState('#ffffff')
   const inputRef = useRef(null)
   const textRef = useRef(null)
 
   const currentValue = getValue(id, defaultValue)
+  const savedColor = localStorage.getItem(`color-${id}`) || '#ffffff'
 
   useEffect(() => {
     if (isEditing && inputRef.current) {
@@ -24,15 +26,28 @@ function EditableText({
       inputRef.current.select()
     }
   }, [isEditing])
+  
+  useEffect(() => {
+    // Apply saved color on mount
+    if (textRef.current && savedColor) {
+      textRef.current.style.color = savedColor
+    }
+  }, [savedColor])
 
   const startEditing = () => {
     if (!isEditMode) return
     setTempValue(currentValue)
+    const currentColor = textRef.current?.style?.color || savedColor || '#ffffff'
+    setTempColor(currentColor)
     setIsEditing(true)
   }
 
   const saveEdit = () => {
     onUpdate(id, tempValue)
+    localStorage.setItem(`color-${id}`, tempColor)
+    if (textRef.current) {
+      textRef.current.style.color = tempColor
+    }
     setIsEditing(false)
   }
 
@@ -88,6 +103,43 @@ function EditableText({
           />
         )}
         <div className="edit-controls">
+          <div className="color-picker-container">
+            <label htmlFor={`color-${id}`} className="color-label">צבע:</label>
+            <input
+              id={`color-${id}`}
+              type="color"
+              value={tempColor}
+              onChange={(e) => setTempColor(e.target.value)}
+              className="color-picker"
+              title="בחר צבע לטקסט"
+            />
+            <div className="color-presets">
+              <button 
+                className="color-preset"
+                style={{ background: '#ffffff' }}
+                onClick={() => setTempColor('#ffffff')}
+                title="לבן"
+              />
+              <button 
+                className="color-preset"
+                style={{ background: '#4ade80' }}
+                onClick={() => setTempColor('#4ade80')}
+                title="ירוק"
+              />
+              <button 
+                className="color-preset"
+                style={{ background: '#667eea' }}
+                onClick={() => setTempColor('#667eea')}
+                title="סגול"
+              />
+              <button 
+                className="color-preset"
+                style={{ background: '#ff6b6b' }}
+                onClick={() => setTempColor('#ff6b6b')}
+                title="אדום"
+              />
+            </div>
+          </div>
           <button
             className="edit-save-btn"
             onClick={saveEdit}

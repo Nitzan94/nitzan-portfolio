@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
+import UniversalEditableText from './UniversalEditableText'
+import { useEditMode } from '../hooks/useEditMode'
+import useContentManager from '../hooks/useContentManager'
 
 function Enhanced3DArchitecture() {
   const [selectedNode, setSelectedNode] = useState(null)
@@ -7,6 +10,10 @@ function Enhanced3DArchitecture() {
   const [isAnimating, setIsAnimating] = useState(false)
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
+  
+  // Add edit mode functionality
+  const { isEditMode } = useEditMode()
+  const { updateContent, updateColor, getColor } = useContentManager()
 
   const nodes = [
     {
@@ -17,7 +24,7 @@ function Enhanced3DArchitecture() {
       connections: ['templates', 'mcp', 'automation'],
       position: { x: 50, y: 30 },
       color: '#FF6B6B',
-      size: 80
+      size: 120
     },
     {
       id: 'templates',
@@ -27,7 +34,7 @@ function Enhanced3DArchitecture() {
       connections: ['github', 'vercel'],
       position: { x: 75, y: 50 },
       color: '#4ECDC4',
-      size: 65
+      size: 100
     },
     {
       id: 'mcp',
@@ -37,7 +44,7 @@ function Enhanced3DArchitecture() {
       connections: ['memory', 'github', 'analytics'],
       position: { x: 70, y: 75 },
       color: '#45B7D1',
-      size: 70
+      size: 110
     },
     {
       id: 'automation',
@@ -47,7 +54,7 @@ function Enhanced3DArchitecture() {
       connections: ['deploy', 'testing'],
       position: { x: 25, y: 75 },
       color: '#96CEB4',
-      size: 65
+      size: 100
     },
     {
       id: 'github',
@@ -57,7 +64,7 @@ function Enhanced3DArchitecture() {
       connections: ['vercel'],
       position: { x: 15, y: 50 },
       color: '#FFEAA7',
-      size: 60
+      size: 90
     },
     {
       id: 'vercel',
@@ -67,7 +74,7 @@ function Enhanced3DArchitecture() {
       connections: [],
       position: { x: 50, y: 85 },
       color: '#FD79A8',
-      size: 60
+      size: 90
     },
     {
       id: 'memory',
@@ -77,7 +84,7 @@ function Enhanced3DArchitecture() {
       connections: [],
       position: { x: 85, y: 25 },
       color: '#A29BFE',
-      size: 50
+      size: 75
     },
     {
       id: 'analytics',
@@ -87,7 +94,7 @@ function Enhanced3DArchitecture() {
       connections: [],
       position: { x: 90, y: 65 },
       color: '#6C5CE7',
-      size: 50
+      size: 75
     }
   ]
 
@@ -131,9 +138,26 @@ function Enhanced3DArchitecture() {
         transition={{ duration: 0.8 }}
         className="architecture-header"
       >
-        <h2 className="architecture-title">🏗️ ארכיטקטורת המערכת המתקדמת</h2>
+        <UniversalEditableText
+          id="3d-arch-title"
+          defaultValue="🏗️ ארכיטקטורת המערכת המתקדמת"
+          defaultColor={getColor('3d-arch-title', '#ffffff')}
+          tag="h2"
+          className="architecture-title"
+          isEditMode={isEditMode}
+          onUpdate={updateContent}
+          onColorUpdate={updateColor}
+        />
         <div className="architecture-instructions">
-          <p>👆 לחץ על כל רכיב כדי לקבל הסבר מפורט | ✨ רחף עם העכבר לאפקטים</p>
+          <UniversalEditableText
+            id="3d-arch-instructions"
+            defaultValue="👆 לחץ על כל רכיב כדי לקבל הסבר מפורט | ✨ רחף עם העכבר לאפקטים"
+            defaultColor={getColor('3d-arch-instructions', '#ffffff')}
+            tag="p"
+            isEditMode={isEditMode}
+            onUpdate={updateContent}
+            onColorUpdate={updateColor}
+          />
         </div>
       </motion.div>
 

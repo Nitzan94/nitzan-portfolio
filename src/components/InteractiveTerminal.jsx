@@ -5,6 +5,7 @@ function InteractiveTerminal({ title, commands }) {
   const [currentText, setCurrentText] = useState('')
   const [isTyping, setIsTyping] = useState(false)
   const [isStarted, setIsStarted] = useState(false)
+  const [isPaused, setIsPaused] = useState(false)
   const [completedCommands, setCompletedCommands] = useState([])
   const terminalRef = useRef(null)
 
@@ -14,10 +15,32 @@ function InteractiveTerminal({ title, commands }) {
     setCompletedCommands([])
     setCurrentText('')
     setIsTyping(true)
+    setIsPaused(false)
+  }
+
+  const pauseDemo = () => {
+    setIsPaused(true)
+    setIsTyping(false)
+  }
+
+  const resumeDemo = () => {
+    setIsPaused(false)
+    if (currentCommandIndex < commands.length) {
+      setIsTyping(true)
+    }
+  }
+
+  const stopDemo = () => {
+    setIsStarted(false)
+    setIsTyping(false)
+    setIsPaused(false)
+    setCurrentCommandIndex(0)
+    setCompletedCommands([])
+    setCurrentText('')
   }
 
   useEffect(() => {
-    if (!isStarted || !isTyping || currentCommandIndex >= commands.length) {
+    if (!isStarted || !isTyping || isPaused || currentCommandIndex >= commands.length) {
       return
     }
 
@@ -61,13 +84,31 @@ function InteractiveTerminal({ title, commands }) {
           <div className="control maximize"></div>
         </div>
         <div className="terminal-title">{title}</div>
-        <button 
-          className="terminal-replay" 
-          onClick={startDemo}
-          disabled={isTyping}
-        >
-          {isStarted ? '🔄 השעתק' : '▶️ התחל'}
-        </button>
+        <div className="terminal-controls-right">
+          {!isStarted ? (
+            <button className="terminal-btn start" onClick={startDemo}>
+              ▶️ התחל
+            </button>
+          ) : (
+            <>
+              {isTyping ? (
+                <button className="terminal-btn pause" onClick={pauseDemo}>
+                  ⏸️ השהה
+                </button>
+              ) : isPaused ? (
+                <button className="terminal-btn resume" onClick={resumeDemo}>
+                  ▶️ המשך
+                </button>
+              ) : null}
+              <button className="terminal-btn stop" onClick={stopDemo}>
+                ⏹️ עצור
+              </button>
+              <button className="terminal-btn restart" onClick={startDemo}>
+                🔄 התחל מחדש
+              </button>
+            </>
+          )}
+        </div>
       </div>
       
       <div className="terminal-body" ref={terminalRef}>

@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react'
+import UniversalEditableText from './UniversalEditableText'
+import { useEditMode } from '../hooks/useEditMode'
+import useContentManager from '../hooks/useContentManager'
 
 function DemoCarousel({ currentDemo, setCurrentDemo }) {
+  // Add edit mode functionality
+  const { isEditMode } = useEditMode()
+  const { updateContent, updateColor, getColor } = useContentManager()
+  
   const demos = [
     {
       id: 1,
@@ -123,21 +130,62 @@ function DemoCarousel({ currentDemo, setCurrentDemo }) {
         
         <div className="demo-content">
           <div className="demo-header">
-            <h3>{demos[currentDemo].title}</h3>
-            <p>{demos[currentDemo].description}</p>
+            <UniversalEditableText
+              id={`demo-title-${currentDemo}`}
+              defaultValue={demos[currentDemo].title}
+              defaultColor={getColor(`demo-title-${currentDemo}`, '#ffffff')}
+              tag="h3"
+              isEditMode={isEditMode}
+              onUpdate={updateContent}
+              onColorUpdate={updateColor}
+            />
+            <UniversalEditableText
+              id={`demo-desc-${currentDemo}`}
+              defaultValue={demos[currentDemo].description}
+              defaultColor={getColor(`demo-desc-${currentDemo}`, '#ffffff')}
+              tag="p"
+              isEditMode={isEditMode}
+              onUpdate={updateContent}
+              onColorUpdate={updateColor}
+            />
             {demos[currentDemo].instruction && (
               <div className="demo-instruction">
-                <strong>{demos[currentDemo].instruction}</strong>
+                <UniversalEditableText
+                  id={`demo-instruction-${currentDemo}`}
+                  defaultValue={demos[currentDemo].instruction}
+                  defaultColor={getColor(`demo-instruction-${currentDemo}`, '#ffffff')}
+                  tag="strong"
+                  isEditMode={isEditMode}
+                  onUpdate={updateContent}
+                  onColorUpdate={updateColor}
+                />
               </div>
             )}
           </div>
           
           <div className="demo-body">
             <div className="demo-features">
-              <h4>מה תראו כאן:</h4>
+              <UniversalEditableText
+                id="demo-features-title"
+                defaultValue="מה תראו כאן:"
+                defaultColor={getColor('demo-features-title', '#ffffff')}
+                tag="h4"
+                isEditMode={isEditMode}
+                onUpdate={updateContent}
+                onColorUpdate={updateColor}
+              />
               <ul>
                 {demos[currentDemo].features.map((feature, index) => (
-                  <li key={index}>{feature}</li>
+                  <UniversalEditableText
+                    key={index}
+                    id={`demo-feature-${currentDemo}-${index}`}
+                    defaultValue={feature}
+                    defaultColor={getColor(`demo-feature-${currentDemo}-${index}`, '#ffffff')}
+                    tag="li"
+                    isEditMode={isEditMode}
+                    onUpdate={updateContent}
+                    onColorUpdate={updateColor}
+                  />
                 ))}
               </ul>
             </div>

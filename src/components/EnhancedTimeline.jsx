@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
+import UniversalEditableText from './UniversalEditableText'
+import { useEditMode } from '../hooks/useEditMode'
+import useContentManager from '../hooks/useContentManager'
 
 function EnhancedTimeline() {
   const [currentTime, setCurrentTime] = useState(0)
@@ -8,6 +11,10 @@ function EnhancedTimeline() {
   const [isPlaying, setIsPlaying] = useState(false)
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
+  
+  // Add edit mode functionality
+  const { isEditMode } = useEditMode()
+  const { updateContent, updateColor, getColor } = useContentManager()
 
   const milestones = [
     { time: 0, title: 'התחלה', description: 'קבלת דרישות והגדרת מטרות', icon: '🎯', progress: 0 },
@@ -107,7 +114,16 @@ function EnhancedTimeline() {
         transition={{ duration: 0.8 }}
         className="timeline-header"
       >
-        <h2 className="timeline-title">⏱️ איך בניתי את האתר הזה תוך שעה</h2>
+        <UniversalEditableText
+          id="enhanced-timeline-title"
+          defaultValue="⏱️ איך בניתי את האתר הזה תוך שעה"
+          defaultColor={getColor('enhanced-timeline-title', '#ffffff')}
+          tag="h2"
+          className="timeline-title"
+          isEditMode={isEditMode}
+          onUpdate={updateContent}
+          onColorUpdate={updateColor}
+        />
         <div className="timeline-controls">
           <div className="time-display">
             <span className="current-time">{formatTime(currentTime)}</span>
@@ -170,8 +186,26 @@ function EnhancedTimeline() {
                 
                 <div className="milestone-content">
                   <div className="milestone-time">{formatTime(milestone.time)}</div>
-                  <div className="milestone-title">{milestone.title}</div>
-                  <div className="milestone-description">{milestone.description}</div>
+                  <UniversalEditableText
+                    id={`milestone-title-${index}`}
+                    defaultValue={milestone.title}
+                    defaultColor={getColor(`milestone-title-${index}`, '#ffffff')}
+                    tag="div"
+                    className="milestone-title"
+                    isEditMode={isEditMode}
+                    onUpdate={updateContent}
+                    onColorUpdate={updateColor}
+                  />
+                  <UniversalEditableText
+                    id={`milestone-desc-${index}`}
+                    defaultValue={milestone.description}
+                    defaultColor={getColor(`milestone-desc-${index}`, '#ffffff')}
+                    tag="div"
+                    className="milestone-description"
+                    isEditMode={isEditMode}
+                    onUpdate={updateContent}
+                    onColorUpdate={updateColor}
+                  />
                   <div className="milestone-progress">{milestone.progress}% Complete</div>
                 </div>
 
