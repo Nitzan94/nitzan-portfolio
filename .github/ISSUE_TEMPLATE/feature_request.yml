@@ -1,0 +1,214 @@
+name: ✨ Feature Request
+description: Suggest an idea for this project
+title: "[FEATURE]: "
+labels: ["enhancement", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to suggest a feature! Please fill out this form as completely as possible to help us understand your needs.
+
+  - type: checkboxes
+    id: existing-feature
+    attributes:
+      label: Is there an existing feature request for this?
+      description: Please search to see if a feature request already exists for what you're suggesting.
+      options:
+      - label: I have searched the existing feature requests
+        required: true
+
+  - type: textarea
+    id: problem-statement
+    attributes:
+      label: Problem Statement
+      description: Is your feature request related to a problem? Please describe the problem you're trying to solve.
+      placeholder: "I'm always frustrated when..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the solution you'd like to see implemented.
+      placeholder: "I would like to see..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative Solutions
+      description: Describe any alternative solutions or features you've considered.
+      placeholder: "Alternative approaches could be..."
+
+  - type: textarea
+    id: user-story
+    attributes:
+      label: User Story
+      description: Describe this feature from a user's perspective.
+      placeholder: |
+        As a [type of user], I want [goal] so that [benefit].
+        
+        Example:
+        As a developer, I want dark mode support so that I can work comfortably in low-light environments.
+
+  - type: dropdown
+    id: user-type
+    attributes:
+      label: User Type
+      description: What type of user would benefit from this feature?
+      options:
+        - End User
+        - Developer
+        - Administrator
+        - API Consumer
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to you?
+      options:
+        - Nice to have - Would be useful but not critical
+        - Important - Would significantly improve experience
+        - Critical - Blocking or severely limiting current workflow
+    validations:
+      required: true
+
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: Expected Complexity
+      description: How complex do you think implementing this feature would be?
+      options:
+        - Simple - Small UI change or minor enhancement
+        - Medium - New component or moderate functionality
+        - Complex - Major feature or architectural change
+        - Unknown - Not sure about implementation complexity
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Feature Area
+      description: Which area of the application would this feature affect?
+      multiple: true
+      options:
+        - User Interface
+        - Authentication
+        - Data Management
+        - Performance
+        - Security
+        - API
+        - Documentation
+        - DevOps/Deployment
+        - Testing
+        - Accessibility
+        - Mobile Responsiveness
+        - Third-party Integrations
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: What would need to be implemented for this feature to be considered complete?
+      placeholder: |
+        - [ ] Criterion 1
+        - [ ] Criterion 2
+        - [ ] Criterion 3
+
+  - type: textarea
+    id: mockups
+    attributes:
+      label: Mockups/Wireframes
+      description: If applicable, add mockups, wireframes, or visual examples.
+      placeholder: Drag and drop your files here or paste URLs...
+
+  - type: textarea
+    id: technical-considerations
+    attributes:
+      label: Technical Considerations
+      description: Any technical considerations, constraints, or requirements?
+      placeholder: |
+        - Performance requirements
+        - Browser compatibility
+        - Third-party dependencies
+        - Security considerations
+
+  - type: dropdown
+    id: breaking-change
+    attributes:
+      label: Breaking Change
+      description: Would this feature potentially introduce breaking changes?
+      options:
+        - No - Fully backward compatible
+        - Minor - Some configuration changes might be needed
+        - Major - Significant breaking changes expected
+        - Unknown - Not sure about compatibility impact
+    validations:
+      required: true
+
+  - type: textarea
+    id: migration-path
+    attributes:
+      label: Migration Path
+      description: If this would introduce breaking changes, how should users migrate?
+      placeholder: "Users would need to..."
+
+  - type: input
+    id: target-version
+    attributes:
+      label: Target Version
+      description: What version would you like to see this feature in?
+      placeholder: "e.g., v2.0.0 or next major release"
+
+  - type: textarea
+    id: research
+    attributes:
+      label: Research and References
+      description: Any research, similar implementations, or references that support this feature?
+      placeholder: |
+        - Links to similar features in other projects
+        - Research papers or articles
+        - User feedback or surveys
+
+  - type: checkboxes
+    id: implementation
+    attributes:
+      label: Implementation Commitment
+      description: Are you willing to help with implementation?
+      options:
+        - label: I would be willing to implement this feature
+          required: false
+        - label: I would be willing to test this feature
+          required: false
+        - label: I would be willing to help with documentation
+          required: false
+        - label: I would be willing to provide design feedback
+          required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context, screenshots, or examples about the feature request here.
+      placeholder: Any additional information that would be helpful...
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this feature request, you agree to follow our Code of Conduct
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

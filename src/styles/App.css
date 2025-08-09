@@ -1,0 +1,32 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  background: #f8f9fa;
+  padding: 2rem;
+  text-align: center;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.app-header h1 {
+  color: #007bff;
+  margin-bottom: 0.5rem;
+}
+
+.home {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.home ul {
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+.home li {
+  margin: 0.5rem 0;
+}

@@ -1,0 +1,35 @@
+# Global code owners
+* @team-leads @senior-developers
+
+# Frontend specific
+/src/components/ @frontend-team @ui-ux-team
+/src/pages/ @frontend-team
+/src/hooks/ @frontend-team @react-experts
+/src/utils/ @frontend-team @utils-maintainers
+/src/styles/ @frontend-team @ui-ux-team
+
+# Configuration files
+/src/config/ @devops-team @senior-developers
+/.github/ @devops-team @team-leads
+/docker* @devops-team
+/k8s/ @devops-team @infrastructure-team
+
+# Documentation
+/docs/ @tech-writers @team-leads
+README.md @team-leads
+CONTRIBUTING.md @team-leads
+CHANGELOG.md @team-leads
+
+# Testing
+/tests/ @qa-team @frontend-team
+*.test.js @qa-team @frontend-team
+*.spec.js @qa-team @frontend-team
+
+# Build and deployment
+vite.config.js @frontend-team @devops-team
+package.json @team-leads @devops-team
+tsconfig.json @frontend-team @typescript-experts
+
+# Security sensitive files
+.env* @security-team @devops-team
+/src/config/security* @security-team @senior-developers

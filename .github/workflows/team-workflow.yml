@@ -1,0 +1,391 @@
+name: Team Collaboration Workflow
+
+on:
+  pull_request:
+    branches: [main, develop]
+    types: [opened, synchronize, reopened, ready_for_review]
+  pull_request_review:
+    types: [submitted]
+  issues:
+    types: [opened, labeled]
+  push:
+    branches: [main, develop]
+
+jobs:
+  # Auto-assign reviewers based on code changes
+  assign-reviewers:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Assign reviewers based on CODEOWNERS
+        uses: hkusu/review-assign-action@v1
+        with:
+          assignees: ${{ github.event.pull_request.user.login }}
+          reviewers: |
+            frontend: @frontend-team
+            backend: @backend-team
+            infra: @devops-team
+          config: |
+            # Frontend files
+            *.jsx,*.tsx,*.js,*.ts,src/components/**,src/pages/** -> frontend
+            # Backend files
+            api/**,server/**,*.sql,migrations/** -> backend
+            # Infrastructure files
+            docker*,k8s/**,.github/** -> infra
+
+  # Code quality checks
+  code-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run quality checks
+        run: |
+          npm run lint:check
+          npm run typecheck
+          npm run test -- --coverage
+          
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage/lcov.info
+          
+      - name: Comment PR with quality report
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            // Read coverage report
+            let coverageReport = '';
+            try {
+              const coverage = JSON.parse(fs.readFileSync('./coverage/coverage-summary.json'));
+              const total = coverage.total;
+              coverageReport = `
+              ## 📊 Code Coverage Report
+              
+              - **Lines**: ${total.lines.pct}%
+              - **Branches**: ${total.branches.pct}%
+              - **Functions**: ${total.functions.pct}%
+              - **Statements**: ${total.statements.pct}%
+              `;
+            } catch (e) {
+              coverageReport = '## 📊 Coverage report not available';
+            }
+            
+            const body = `
+            ## ✅ Code Quality Check Results
+            
+            ${coverageReport}
+            
+            ### 🔍 Checks Performed:
+            - ✅ ESLint validation
+            - ✅ TypeScript type checking
+            - ✅ Test suite execution
+            - ✅ Coverage analysis
+            
+            *Automated by team workflow*
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+  # Security scanning
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Run security audit
+        run: npm audit --audit-level=moderate
+        
+      - name: Run Snyk security scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=medium
+          
+      - name: Upload Snyk results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: snyk.sarif
+
+  # Performance budgets
+  performance-budget:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build project
+        run: npm run build
+        
+      - name: Analyze bundle size
+        uses: preactjs/compressed-size-action@v2
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          pattern: "./dist/**/*.{js,css}"
+          minimum-change-threshold: 100
+          
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          configPath: './.lighthouserc.json'
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+  # Dependency updates notification
+  dependency-update:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check for outdated dependencies
+        run: |
+          npm outdated --json > outdated.json || true
+          
+      - name: Create dependency update issue
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            let outdated = {};
+            try {
+              outdated = JSON.parse(fs.readFileSync('outdated.json'));
+            } catch (e) {
+              console.log('No outdated dependencies found');
+              return;
+            }
+            
+            if (Object.keys(outdated).length === 0) return;
+            
+            const packages = Object.entries(outdated).map(([name, info]) => 
+              `- **${name}**: ${info.current} → ${info.wanted} (latest: ${info.latest})`
+            ).join('\n');
+            
+            const body = `
+            ## 📦 Dependency Update Available
+            
+            The following dependencies have updates available:
+            
+            ${packages}
+            
+            ### 🚀 Action Required:
+            - Review the changes in each package
+            - Update dependencies: \`npm update\`
+            - Run tests to ensure compatibility
+            - Create PR with updates
+            
+            *This issue was created automatically by the team workflow*
+            `;
+            
+            // Check if similar issue already exists
+            const existingIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'dependencies'
+            });
+            
+            const hasExisting = existingIssues.data.some(issue => 
+              issue.title.includes('Dependency Update Available')
+            );
+            
+            if (!hasExisting) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: '📦 Dependency Update Available',
+                body: body,
+                labels: ['dependencies', 'maintenance']
+              });
+            }
+
+  # Auto-merge for trusted contributors
+  auto-merge:
+    if: github.event_name == 'pull_request_review'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto-merge approved PRs
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+            
+            // Only auto-merge if:
+            // 1. PR is approved
+            // 2. Author is a trusted contributor
+            // 3. All checks are passing
+            // 4. PR has the 'auto-merge' label
+            
+            const trustedContributors = ['maintainer1', 'maintainer2'];
+            const isApproved = context.payload.review.state === 'approved';
+            const isTrusted = trustedContributors.includes(pr.user.login);
+            const hasAutoMergeLabel = pr.labels.some(label => label.name === 'auto-merge');
+            
+            if (isApproved && isTrusted && hasAutoMergeLabel) {
+              // Check if all required checks are passing
+              const { data: checks } = await github.rest.checks.listForRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: pr.head.sha,
+              });
+              
+              const allChecksPassed = checks.check_runs.every(check => 
+                check.status === 'completed' && check.conclusion === 'success'
+              );
+              
+              if (allChecksPassed) {
+                await github.rest.pulls.merge({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: context.issue.number,
+                  merge_method: 'squash'
+                });
+                
+                console.log('PR auto-merged successfully');
+              }
+            }
+
+  # Issue triage and labeling
+  issue-triage:
+    if: github.event_name == 'issues' && github.event.action == 'opened'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto-label issues
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const title = issue.title.toLowerCase();
+            const body = issue.body.toLowerCase();
+            
+            const labels = [];
+            
+            // Auto-label based on content
+            if (title.includes('bug') || body.includes('error') || body.includes('broken')) {
+              labels.push('bug');
+            }
+            
+            if (title.includes('feature') || title.includes('enhancement')) {
+              labels.push('enhancement');
+            }
+            
+            if (body.includes('documentation') || title.includes('docs')) {
+              labels.push('documentation');
+            }
+            
+            if (body.includes('performance') || title.includes('slow')) {
+              labels.push('performance');
+            }
+            
+            if (body.includes('security') || title.includes('vulnerability')) {
+              labels.push('security');
+            }
+            
+            // Priority labeling
+            if (body.includes('urgent') || body.includes('critical')) {
+              labels.push('priority: high');
+            } else if (body.includes('nice to have') || body.includes('minor')) {
+              labels.push('priority: low');
+            } else {
+              labels.push('priority: medium');
+            }
+            
+            // Add effort estimation label
+            const bodyLength = body.length;
+            if (bodyLength > 1000) {
+              labels.push('effort: large');
+            } else if (bodyLength > 300) {
+              labels.push('effort: medium');
+            } else {
+              labels.push('effort: small');
+            }
+            
+            // Apply labels
+            if (labels.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: labels
+              });
+            }
+            
+            // Auto-assign based on labels
+            let assignee = null;
+            if (labels.includes('bug')) {
+              assignee = 'bug-triager';
+            } else if (labels.includes('security')) {
+              assignee = 'security-team';
+            } else if (labels.includes('performance')) {
+              assignee = 'performance-team';
+            }
+            
+            if (assignee) {
+              await github.rest.issues.addAssignees({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                assignees: [assignee]
+              });
+            }
+
+  # Team notifications
+  team-notifications:
+    if: always()
+    runs-on: ubuntu-latest
+    needs: [code-quality, security-scan, performance-budget]
+    steps:
+      - name: Notify team on Slack
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          channel: '#dev-alerts'
+          text: |
+            🚨 **Team Workflow Failed**
+            
+            **Repository**: ${{ github.repository }}
+            **Branch**: ${{ github.ref }}
+            **Commit**: ${{ github.sha }}
+            **Author**: ${{ github.actor }}
+            
+            Please check the failed jobs and take action.
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

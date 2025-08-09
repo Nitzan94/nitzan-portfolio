@@ -1,0 +1,411 @@
+name: Team Metrics and Analytics
+
+on:
+  schedule:
+    # Run weekly on Mondays at 9:00 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    types: [closed]
+
+jobs:
+  # Collect team productivity metrics
+  team-productivity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          
+      - name: Install dependencies
+        run: npm install -g @octokit/rest
+        
+      - name: Generate team metrics
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const { Octokit } = require('@octokit/rest');
+            
+            const octokit = new Octokit({
+              auth: context.payload.repository.private ? process.env.GITHUB_TOKEN : undefined
+            });
+            
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            
+            // Get date ranges
+            const now = new Date();
+            const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            const oneMonthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+            
+            // Helper function to format date for GitHub API
+            const formatDate = (date) => date.toISOString();
+            
+            try {
+              // Get pull requests
+              const { data: pullRequests } = await octokit.rest.pulls.list({
+                owner,
+                repo,
+                state: 'all',
+                since: formatDate(oneMonthAgo),
+                per_page: 100
+              });
+              
+              // Get issues
+              const { data: issues } = await octokit.rest.issues.listForRepo({
+                owner,
+                repo,
+                state: 'all',
+                since: formatDate(oneMonthAgo),
+                per_page: 100
+              });
+              
+              // Filter out pull requests from issues
+              const actualIssues = issues.filter(issue => !issue.pull_request);
+              
+              // Get commits
+              const { data: commits } = await octokit.rest.repos.listCommits({
+                owner,
+                repo,
+                since: formatDate(oneMonthAgo),
+                per_page: 100
+              });
+              
+              // Calculate metrics
+              const weeklyPRs = pullRequests.filter(pr => 
+                new Date(pr.created_at) >= oneWeekAgo
+              );
+              
+              const weeklyIssues = actualIssues.filter(issue => 
+                new Date(issue.created_at) >= oneWeekAgo
+              );
+              
+              const weeklyCommits = commits.filter(commit => 
+                new Date(commit.commit.author.date) >= oneWeekAgo
+              );
+              
+              // PR metrics
+              const openPRs = pullRequests.filter(pr => pr.state === 'open').length;
+              const closedPRs = pullRequests.filter(pr => pr.state === 'closed').length;
+              const mergedPRs = pullRequests.filter(pr => pr.merged_at).length;
+              
+              // Calculate average PR lifetime
+              const completedPRs = pullRequests.filter(pr => pr.closed_at);
+              const avgPRLifetime = completedPRs.length > 0 
+                ? completedPRs.reduce((sum, pr) => {
+                    const created = new Date(pr.created_at);
+                    const closed = new Date(pr.closed_at);
+                    return sum + (closed - created);
+                  }, 0) / completedPRs.length / (1000 * 60 * 60 * 24) // Convert to days
+                : 0;
+              
+              // Issue metrics
+              const openIssues = actualIssues.filter(issue => issue.state === 'open').length;
+              const closedIssues = actualIssues.filter(issue => issue.state === 'closed').length;
+              
+              // Calculate average issue resolution time
+              const resolvedIssues = actualIssues.filter(issue => issue.closed_at);
+              const avgIssueResolution = resolvedIssues.length > 0
+                ? resolvedIssues.reduce((sum, issue) => {
+                    const created = new Date(issue.created_at);
+                    const closed = new Date(issue.closed_at);
+                    return sum + (closed - created);
+                  }, 0) / resolvedIssues.length / (1000 * 60 * 60 * 24) // Convert to days
+                : 0;
+              
+              // Contributor activity
+              const contributors = {};
+              commits.forEach(commit => {
+                const author = commit.author ? commit.author.login : commit.commit.author.name;
+                contributors[author] = (contributors[author] || 0) + 1;
+              });
+              
+              const topContributors = Object.entries(contributors)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 5);
+              
+              // Generate metrics report
+              const metricsReport = {
+                generated_at: now.toISOString(),
+                period: {
+                  from: formatDate(oneMonthAgo),
+                  to: formatDate(now)
+                },
+                summary: {
+                  total_prs: pullRequests.length,
+                  weekly_prs: weeklyPRs.length,
+                  open_prs: openPRs,
+                  merged_prs: mergedPRs,
+                  avg_pr_lifetime_days: Math.round(avgPRLifetime * 100) / 100,
+                  total_issues: actualIssues.length,
+                  weekly_issues: weeklyIssues.length,
+                  open_issues: openIssues,
+                  closed_issues: closedIssues,
+                  avg_issue_resolution_days: Math.round(avgIssueResolution * 100) / 100,
+                  total_commits: commits.length,
+                  weekly_commits: weeklyCommits.length,
+                  active_contributors: Object.keys(contributors).length
+                },
+                top_contributors: topContributors.map(([name, commits]) => ({
+                  name,
+                  commits
+                }))
+              };
+              
+              // Save metrics to file
+              fs.writeFileSync('team-metrics.json', JSON.stringify(metricsReport, null, 2));
+              
+              // Create metrics summary comment (for PR events)
+              if (context.eventName === 'pull_request' && context.payload.pull_request.merged) {
+                const summaryComment = `
+## 📊 Team Metrics Update
+
+### Recent Activity (Last 7 days)
+- **Pull Requests**: ${weeklyPRs.length} created
+- **Issues**: ${weeklyIssues.length} created
+- **Commits**: ${weeklyCommits.length} commits
+- **Contributors**: ${Object.keys(contributors).length} active
+
+### Overall Health
+- **Open PRs**: ${openPRs}
+- **Open Issues**: ${openIssues}
+- **Avg PR Lifetime**: ${Math.round(avgPRLifetime * 10) / 10} days
+- **Avg Issue Resolution**: ${Math.round(avgIssueResolution * 10) / 10} days
+
+*Updated automatically by team metrics workflow*
+`;
+
+                await github.rest.issues.createComment({
+                  owner,
+                  repo,
+                  issue_number: context.payload.pull_request.number,
+                  body: summaryComment
+                });
+              }
+              
+              console.log('Team metrics generated successfully');
+              console.log(JSON.stringify(metricsReport, null, 2));
+              
+            } catch (error) {
+              console.error('Error generating metrics:', error);
+              throw error;
+            }
+            
+      - name: Upload metrics artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: team-metrics-${{ github.sha }}
+          path: team-metrics.json
+          retention-days: 90
+
+  # Code quality trends
+  code-quality-trends:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run quality analysis
+        run: |
+          npm run lint -- --format json --output-file eslint-results.json || true
+          npm run test -- --coverage --coverageReporters=json || true
+          npm run typecheck || true
+          
+      - name: Analyze quality trends
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            let qualityReport = {
+              generated_at: new Date().toISOString(),
+              commit: context.sha,
+              lint: { errors: 0, warnings: 0 },
+              coverage: { lines: 0, branches: 0, functions: 0, statements: 0 },
+              typescript: { errors: 0 }
+            };
+            
+            // Parse ESLint results
+            try {
+              if (fs.existsSync('eslint-results.json')) {
+                const eslintData = JSON.parse(fs.readFileSync('eslint-results.json', 'utf8'));
+                qualityReport.lint = eslintData.reduce((acc, file) => ({
+                  errors: acc.errors + file.errorCount,
+                  warnings: acc.warnings + file.warningCount
+                }), { errors: 0, warnings: 0 });
+              }
+            } catch (e) {
+              console.log('Could not parse ESLint results:', e.message);
+            }
+            
+            // Parse coverage results
+            try {
+              if (fs.existsSync('coverage/coverage-summary.json')) {
+                const coverageData = JSON.parse(fs.readFileSync('coverage/coverage-summary.json', 'utf8'));
+                qualityReport.coverage = {
+                  lines: coverageData.total.lines.pct,
+                  branches: coverageData.total.branches.pct,
+                  functions: coverageData.total.functions.pct,
+                  statements: coverageData.total.statements.pct
+                };
+              }
+            } catch (e) {
+              console.log('Could not parse coverage results:', e.message);
+            }
+            
+            // Save quality report
+            fs.writeFileSync('code-quality.json', JSON.stringify(qualityReport, null, 2));
+            
+            console.log('Code quality analysis completed');
+            console.log(JSON.stringify(qualityReport, null, 2));
+            
+      - name: Upload quality artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-quality-${{ github.sha }}
+          path: code-quality.json
+          retention-days: 90
+
+  # Weekly team report
+  weekly-report:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    needs: [team-productivity, code-quality-trends]
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download metrics
+        uses: actions/download-artifact@v4
+        with:
+          pattern: '*-metrics-*'
+          merge-multiple: true
+          
+      - name: Generate weekly report
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            // Load metrics data
+            let teamMetrics = {};
+            let qualityMetrics = {};
+            
+            try {
+              if (fs.existsSync('team-metrics.json')) {
+                teamMetrics = JSON.parse(fs.readFileSync('team-metrics.json', 'utf8'));
+              }
+            } catch (e) {
+              console.log('Could not load team metrics:', e.message);
+            }
+            
+            try {
+              if (fs.existsSync('code-quality.json')) {
+                qualityMetrics = JSON.parse(fs.readFileSync('code-quality.json', 'utf8'));
+              }
+            } catch (e) {
+              console.log('Could not load quality metrics:', e.message);
+            }
+            
+            // Generate report
+            const report = `
+# 📊 Weekly Team Report
+
+*Generated on ${new Date().toDateString()}*
+
+## 🎯 Team Productivity
+
+### Pull Requests
+- **Total PRs this month**: ${teamMetrics.summary?.total_prs || 'N/A'}
+- **PRs this week**: ${teamMetrics.summary?.weekly_prs || 'N/A'}
+- **Currently open**: ${teamMetrics.summary?.open_prs || 'N/A'}
+- **Merged**: ${teamMetrics.summary?.merged_prs || 'N/A'}
+- **Average lifetime**: ${teamMetrics.summary?.avg_pr_lifetime_days || 'N/A'} days
+
+### Issues
+- **Total issues this month**: ${teamMetrics.summary?.total_issues || 'N/A'}
+- **Issues this week**: ${teamMetrics.summary?.weekly_issues || 'N/A'}
+- **Currently open**: ${teamMetrics.summary?.open_issues || 'N/A'}
+- **Average resolution time**: ${teamMetrics.summary?.avg_issue_resolution_days || 'N/A'} days
+
+### Development Activity
+- **Commits this month**: ${teamMetrics.summary?.total_commits || 'N/A'}
+- **Commits this week**: ${teamMetrics.summary?.weekly_commits || 'N/A'}
+- **Active contributors**: ${teamMetrics.summary?.active_contributors || 'N/A'}
+
+## 🏆 Top Contributors
+${teamMetrics.top_contributors?.map((contributor, i) => 
+  `${i + 1}. **${contributor.name}** - ${contributor.commits} commits`
+).join('\n') || 'No data available'}
+
+## 📈 Code Quality
+
+### Test Coverage
+- **Lines**: ${qualityMetrics.coverage?.lines || 'N/A'}%
+- **Branches**: ${qualityMetrics.coverage?.branches || 'N/A'}%
+- **Functions**: ${qualityMetrics.coverage?.functions || 'N/A'}%
+- **Statements**: ${qualityMetrics.coverage?.statements || 'N/A'}%
+
+### Code Quality Issues
+- **ESLint Errors**: ${qualityMetrics.lint?.errors || 'N/A'}
+- **ESLint Warnings**: ${qualityMetrics.lint?.warnings || 'N/A'}
+- **TypeScript Errors**: ${qualityMetrics.typescript?.errors || 'N/A'}
+
+## 🎯 Recommendations
+
+${teamMetrics.summary?.avg_pr_lifetime_days > 5 ? '- ⚠️ Consider reducing PR review time (currently ' + teamMetrics.summary.avg_pr_lifetime_days + ' days avg)\n' : ''}
+${teamMetrics.summary?.open_issues > 20 ? '- ⚠️ Consider addressing open issues (currently ' + teamMetrics.summary.open_issues + ' open)\n' : ''}
+${qualityMetrics.coverage?.lines < 80 ? '- ⚠️ Consider improving test coverage (currently ' + qualityMetrics.coverage.lines + '%)\n' : ''}
+${qualityMetrics.lint?.errors > 0 ? '- ⚠️ Address ESLint errors (' + qualityMetrics.lint.errors + ' errors)\n' : ''}
+
+---
+
+*This report is generated automatically every Monday. Data covers the last 30 days.*
+`;
+            
+            // Create issue with weekly report
+            const { data: issue } = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `📊 Weekly Team Report - ${new Date().toDateString()}`,
+              body: report,
+              labels: ['team-report', 'metrics', 'documentation']
+            });
+            
+            console.log(`Weekly report created: ${issue.html_url}`);
+            
+      - name: Notify team on Slack (if configured)
+        if: env.SLACK_WEBHOOK_URL
+        uses: 8398a7/action-slack@v3
+        with:
+          status: 'success'
+          channel: '#team-metrics'
+          text: |
+            📊 **Weekly Team Report Generated**
+            
+            Check out this week's team metrics and productivity insights!
+            Repository: ${{ github.repository }}
+            
+            Key highlights:
+            • PRs: ${{ needs.team-productivity.outputs.weekly_prs || 'N/A' }} this week
+            • Issues: ${{ needs.team-productivity.outputs.weekly_issues || 'N/A' }} this week  
+            • Contributors: ${{ needs.team-productivity.outputs.active_contributors || 'N/A' }} active
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

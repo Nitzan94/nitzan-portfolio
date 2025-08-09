@@ -1,0 +1,237 @@
+name: ❓ Question
+description: Ask a question about this project
+title: "[QUESTION]: "
+labels: ["question", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your question! Please provide as much detail as possible to help us give you the best answer.
+        
+        📚 **Before asking:**
+        - Check our documentation
+        - Search existing issues and discussions
+        - Look through our FAQ if available
+
+  - type: checkboxes
+    id: existing-resources
+    attributes:
+      label: Have you checked existing resources?
+      description: Please confirm you've looked for existing answers
+      options:
+        - label: I have searched the existing issues and discussions
+          required: true
+        - label: I have checked the documentation
+          required: true
+
+  - type: dropdown
+    id: question-type
+    attributes:
+      label: Type of Question
+      description: What kind of question is this?
+      options:
+        - How-to / Usage Question
+        - Technical Implementation
+        - Best Practices
+        - Configuration Help
+        - Troubleshooting
+        - Architecture/Design
+        - Performance
+        - Security
+        - Integration
+        - Documentation Clarification
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: Urgency
+      description: How urgent is getting an answer to this question?
+      options:
+        - Low - General curiosity or future planning
+        - Medium - Would help with current development
+        - High - Blocking current work
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your Question
+      description: What would you like to know? Be as specific as possible.
+      placeholder: I would like to understand...
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Provide context about what you're trying to achieve or the problem you're solving.
+      placeholder: |
+        I'm working on...
+        I need to...
+        My goal is to...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: experience-level
+    attributes:
+      label: Your Experience Level
+      description: This helps us tailor our answer appropriately
+      options:
+        - Beginner - New to this technology/framework
+        - Intermediate - Some experience with similar technologies
+        - Advanced - Experienced developer
+        - Expert - Deep knowledge of the technology stack
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-tried
+    attributes:
+      label: What Have You Tried?
+      description: What approaches have you already attempted?
+      placeholder: |
+        I have tried...
+        I looked at...
+        I attempted to...
+
+  - type: textarea
+    id: current-code
+    attributes:
+      label: Current Code/Implementation
+      description: Share relevant code snippets or current implementation (if applicable)
+      render: javascript
+      placeholder: |
+        // Current code or implementation
+        function example() {
+          // Your code here
+        }
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Related Area
+      description: Which area does your question relate to?
+      multiple: true
+      options:
+        - Frontend (React/UI)
+        - Backend/API
+        - Database
+        - Authentication
+        - Deployment
+        - Testing
+        - Performance
+        - Security
+        - Configuration
+        - Third-party Integrations
+        - DevOps/CI-CD
+        - Documentation
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version Information
+      description: What version of the project/framework are you using?
+      placeholder: "e.g., v1.2.3, latest, main branch"
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      description: What environment are you working in?
+      multiple: true
+      options:
+        - Development
+        - Staging
+        - Production
+        - Testing
+        - Local Setup
+    validations:
+      required: true
+
+  - type: input
+    id: os-browser
+    attributes:
+      label: Operating System/Browser
+      description: What OS and browser are you using? (if relevant)
+      placeholder: "e.g., Windows 11, macOS 13, Chrome 118"
+
+  - type: textarea
+    id: expected-outcome
+    attributes:
+      label: Expected Outcome
+      description: What outcome or behavior are you hoping to achieve?
+      placeholder: I expect to be able to...
+
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Constraints or Requirements
+      description: Any specific constraints, requirements, or limitations to consider?
+      placeholder: |
+        - Must be compatible with...
+        - Cannot use... due to...
+        - Performance requirements...
+        - Security considerations...
+
+  - type: dropdown
+    id: answer-format
+    attributes:
+      label: Preferred Answer Format
+      description: How would you prefer to receive the answer?
+      options:
+        - Code example with explanation
+        - Step-by-step instructions
+        - Conceptual explanation
+        - Links to relevant documentation
+        - Any format that helps
+    validations:
+      required: true
+
+  - type: textarea
+    id: similar-examples
+    attributes:
+      label: Similar Examples
+      description: Have you seen similar implementations or examples elsewhere?
+      placeholder: |
+        I saw something similar in...
+        Other projects do this by...
+        I found this example but...
+
+  - type: checkboxes
+    id: follow-up
+    attributes:
+      label: Follow-up Commitment
+      description: Help us help you better
+      options:
+        - label: I will provide additional details if requested
+          required: false
+        - label: I will test suggested solutions and provide feedback
+          required: false
+        - label: I am willing to help improve documentation based on the answer
+          required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other information that might be relevant to your question?
+      placeholder: Additional details that might be helpful...
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this question, you agree to follow our Code of Conduct
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

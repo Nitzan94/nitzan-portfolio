@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Community Discussion
+    url: https://github.com/orgs/your-org/discussions
+    about: Ask questions and discuss ideas with the community
+  - name: 📧 Security Vulnerabilities
+    url: mailto:security@company.com
+    about: Report critical security vulnerabilities privately
+  - name: 📚 Documentation
+    url: https://docs.your-project.com
+    about: Check our comprehensive documentation
+  - name: 🚑 Support
+    url: https://support.your-company.com
+    about: Get technical support for enterprise customers

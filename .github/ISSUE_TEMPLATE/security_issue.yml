@@ -1,0 +1,239 @@
+name: 🛡️ Security Issue
+description: Report a security vulnerability (private)
+title: "[SECURITY]: "
+labels: ["security", "priority: high"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ⚠️ **IMPORTANT SECURITY NOTICE** ⚠️
+        
+        If this is a **critical security vulnerability**, please do NOT create a public issue.
+        Instead, please email us directly at security@company.com or use our private vulnerability disclosure process.
+        
+        This form should only be used for:
+        - Non-critical security improvements
+        - Security-related questions
+        - Security documentation issues
+        - General security concerns
+
+  - type: checkboxes
+    id: severity-check
+    attributes:
+      label: Severity Assessment
+      description: Please confirm the severity level of this security issue
+      options:
+        - label: This is NOT a critical vulnerability that could lead to immediate harm
+          required: true
+        - label: I understand that critical vulnerabilities should be reported privately
+          required: true
+
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Type of Security Issue
+      description: What type of security issue is this?
+      options:
+        - Security Enhancement Request
+        - Security Documentation Issue
+        - Security Configuration Question
+        - Security Best Practices Discussion
+        - Security Audit Request
+        - Security Testing Issue
+        - Other Security Concern
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Provide a clear description of the security concern or improvement.
+      placeholder: Describe the security issue or enhancement...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: security-area
+    attributes:
+      label: Security Area
+      description: Which area does this security issue affect?
+      multiple: true
+      options:
+        - Authentication
+        - Authorization
+        - Input Validation
+        - Output Encoding
+        - Session Management
+        - Cryptography
+        - Error Handling
+        - Logging and Monitoring
+        - Data Protection
+        - Network Security
+        - Dependency Security
+        - Configuration Security
+        - API Security
+        - Client-side Security
+        - Infrastructure Security
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Affected Component
+      description: Which component is affected by this security issue?
+      multiple: true
+      options:
+        - Frontend (React Components)
+        - Backend API
+        - Database
+        - Authentication System
+        - File Upload
+        - Third-party Integrations
+        - Build/Deployment Process
+        - Development Environment
+        - Documentation
+        - Configuration Files
+        - Dependencies
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-behavior
+    attributes:
+      label: Current Security Behavior
+      description: Describe the current security behavior or implementation.
+      placeholder: Currently, the system...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Security Behavior
+      description: Describe what the secure behavior should be.
+      placeholder: The system should...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: Steps to Reproduce (if applicable)
+      description: If this is about a specific security behavior, provide steps to reproduce.
+      placeholder: |
+        1. Go to '...'
+        2. Perform action '...'
+        3. Observe security behavior '...'
+
+  - type: dropdown
+    id: impact-level
+    attributes:
+      label: Potential Impact
+      description: What could be the potential impact if this security concern is not addressed?
+      options:
+        - Low - Minimal security impact
+        - Medium - Moderate security risk
+        - High - Significant security risk (but not critical)
+        - Informational - No direct security impact
+    validations:
+      required: true
+
+  - type: textarea
+    id: security-requirements
+    attributes:
+      label: Security Requirements
+      description: What security requirements or standards should be considered?
+      placeholder: |
+        - OWASP guidelines
+        - Industry standards
+        - Compliance requirements
+        - Company security policies
+
+  - type: textarea
+    id: mitigation-suggestions
+    attributes:
+      label: Suggested Mitigation
+      description: Do you have any suggestions for how to address this security concern?
+      placeholder: Potential solutions could include...
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      description: In which environment was this security concern identified?
+      multiple: true
+      options:
+        - Development
+        - Staging
+        - Production
+        - Testing
+        - Documentation
+    validations:
+      required: true
+
+  - type: input
+    id: affected-versions
+    attributes:
+      label: Affected Versions
+      description: Which versions are affected by this security concern?
+      placeholder: "e.g., v1.2.0, v1.3.x, all versions"
+
+  - type: textarea
+    id: security-tools
+    attributes:
+      label: Security Tools Used
+      description: What security tools or scanning methods were used to identify this issue?
+      placeholder: |
+        - Static analysis tools
+        - Dynamic scanning
+        - Manual review
+        - Penetration testing
+        - Code audit
+
+  - type: textarea
+    id: references
+    attributes:
+      label: Security References
+      description: Any relevant security references, guidelines, or documentation?
+      placeholder: |
+        - OWASP links
+        - CVE references
+        - Security best practices
+        - Relevant documentation
+
+  - type: checkboxes
+    id: security-checklist
+    attributes:
+      label: Security Review Checklist
+      description: Please confirm you have considered these aspects
+      options:
+        - label: I have verified this is not a critical vulnerability requiring private disclosure
+          required: true
+        - label: I have checked existing security issues to avoid duplicates
+          required: true
+        - label: I have provided sufficient detail for security review
+          required: true
+        - label: I understand this issue will be reviewed by the security team
+          required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Security Context
+      description: Any additional context that would help the security team understand this issue?
+      placeholder: Additional security considerations...
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Security Disclosure Agreement
+      description: By submitting this security issue, you agree to our security disclosure terms
+      options:
+        - label: I agree to follow responsible disclosure practices
+          required: true
+        - label: I understand this issue will be handled according to our security policy
+          required: true
