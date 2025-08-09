@@ -36,23 +36,23 @@ function LeadForm() {
       <div className="lead-form-container submitted">
         <div className="success-message">
           <div className="success-icon">🎉</div>
-          <h2>תודה רבה!</h2>
-          <p>הבקשה שלך נשלחה בהצלחה</p>
-          <p>נחזור אליך בתוך 24 שעות עם פרטי הסדנה</p>
+          <h2>מעולה!</h2>
+          <p>הפנייתך נשלחה בהצלחה</p>
+          <p>אשלח לך משאבים וקישורים לקוד המקור בתוך 24 שעות</p>
           <div className="next-steps">
             <h3>מה קורה הלאה?</h3>
             <div className="steps-list">
               <div className="step">
                 <span className="step-number">1</span>
-                <span>נחזור אליך תוך 24 שעות</span>
+                <span>אשלח לך קישורים לקוד המקור ומדריכים</span>
               </div>
               <div className="step">
                 <span className="step-number">2</span>
-                <span>נקבע יחד תאריך מתאים לסדנה</span>
+                <span>נמצא את האופציה הטובה ביותר ללמוד יחד</span>
               </div>
               <div className="step">
                 <span className="step-number">3</span>
-                <span>תקבל חומרי הכנה מראש</span>
+                <span>נתחיל לשתף פעולה ולפתח פרויקטים</span>
               </div>
             </div>
           </div>
@@ -64,21 +64,21 @@ function LeadForm() {
   return (
     <div className="lead-form-container">
       <div className="form-header">
-        <h2>🎯 רוצה ללמוד איך לבנות מערכת כמו שלי?</h2>
-        <p>הצטרף לסדנת הClaude Code הבלעדית - מוגבלת ל-10 משתתפים!</p>
+        <h2>📚 רוצה ללמוד איך לבנות מערכות כאלה?</h2>
+        <p>אשמח לשתף את הידע ולעזור לך להתחיל עם המתודולוגיה הזאת</p>
         
         <div className="value-props">
           <div className="value-prop">
-            <span className="icon">⚡</span>
-            <span>חסוך 40+ שעות בשבוע</span>
+            <span className="icon">📝</span>
+            <span>קוד מקור ומדריכים</span>
           </div>
           <div className="value-prop">
-            <span className="icon">🚀</span>
-            <span>פיתוח פי-5 מהר יותר</span>
+            <span className="icon">🎓</span>
+            <span>למידה עם דוגמאות</span>
           </div>
           <div className="value-prop">
-            <span className="icon">💰</span>
-            <span>ROI של 500%</span>
+            <span className="icon">🤝</span>
+            <span>שיתוף ידע וניסיון</span>
           </div>
         </div>
       </div>
@@ -143,24 +143,24 @@ function LeadForm() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="interest">מה הכי מעניין אותך?</label>
+          <label htmlFor="interest">מה הכי מעניין אותך כרגע?</label>
           <select
             id="interest"
             name="interest"
             value={formData.interest}
             onChange={handleChange}
           >
-            <option value="">בחר נושא...</option>
-            <option value="automation">אוטומציה ובניית סקריפטים</option>
-            <option value="mcp">שרתי MCP ואינטגרציות</option>
-            <option value="templates">תבניות ופיגומים</option>
-            <option value="workflow">זרימות עבודה מתקדמות</option>
-            <option value="enterprise">פתרונות ארגוניים</option>
+            <option value="">בחר תחום...</option>
+            <option value="architecture">ללמוד ארכיטקטורה מערכתית עם AI</option>
+            <option value="automation">להבין איך לבנות אוטומציות מתקדמות</option>
+            <option value="methodology">להציץ מהטקסט ולקבל מתודולוגיית עבודה</option>
+            <option value="implementation">לראות מימוש מעשי של הרעיונות האלו</option>
+            <option value="collaboration">לשתף פעולה ולפתח יחד פרויקטים</option>
           </select>
         </div>
 
         <div className="form-group">
-          <label htmlFor="experience">רמת נסיון עם AI/Claude?</label>
+          <label htmlFor="experience">מה רמת הניסיון שלך?</label>
           <select
             id="experience"
             name="experience"
@@ -168,10 +168,10 @@ function LeadForm() {
             onChange={handleChange}
           >
             <option value="">בחר רמה...</option>
-            <option value="beginner">מתחיל - בדיוק מתחיל</option>
-            <option value="intermediate">ביניים - יש לי קצת נסיון</option>
-            <option value="advanced">מתקדם - אני כבר עובד עם Claude</option>
-            <option value="expert">מומחה - אני בונה כלים מתקדמים</option>
+            <option value="beginner">מתחיל - רוצה ללמוד ולהתחיל</option>
+            <option value="intermediate">בינוני - יש לי בסיס, רוצה להעמיק</option>
+            <option value="advanced">מתקדם - מעוניין בפיתוח משותף</option>
+            <option value="expert">מומחה - רוצה לשתף וללמוד</option>
           </select>
         </div>
 
@@ -187,7 +187,7 @@ function LeadForm() {
             </>
           ) : (
             <>
-              🚀 רוצה להצטרף לסדנה!
+              📚 בואו נלמד יחד!
             </>
           )}
         </button>
@@ -200,11 +200,11 @@ function LeadForm() {
             </div>
             <div className="signal">
               <span>📧</span>
-              <span>ללא ספאם - מובטח</span>
+              <span>שיתוף ידע - ללא מכירות</span>
             </div>
             <div className="signal">
               <span>⚡</span>
-              <span>מענה תוך 24 שעות</span>
+              <span>קוד מקור ומדריכים מיד</span>
             </div>
           </div>
         </div>

@@ -4,38 +4,100 @@ function DemoCarousel({ currentDemo, setCurrentDemo }) {
   const demos = [
     {
       id: 1,
-      title: '🎯 יצירת פרויקט אוטומטית',
-      description: 'יצירת פרויקט React מלא עם GitHub וVercel בפקודה אחת',
-      features: ['GitHub Integration', 'Vercel Config', 'TypeScript Setup', 'Enterprise Structure'],
-      code: `./new-project.sh amazing-app --type react
-✅ Repository created on GitHub
-🚀 Vercel deployment configured  
-📦 Dependencies installed
-⚡ Development server ready`
+      title: '🏗️ ארכיטקטורת היינטגרציה - הגשר שבניתי',
+      description: 'איך בניתי גשר בין Claude Code לכל המערכות שאני צריך',
+      instruction: '⚙️ האתר הזה זה רק חלק מהצורה - בואו נראה את כל המערכת:',
+      features: [
+        '✅ בניתי גשר בין Claude Code לכל המערכות שאני צריך:',
+        '  → GitHub לניהול קוד, Vercel לפריסה, מערכת קבצים מתקדמת,',
+        '  → ועוד 4 שכבות שמאפשרות לי לעבוד בקצב הזה',
+        '✅ הקמתי מערכת זיכרון שזוכרת כל החלטה ארכיטקטונית',
+        '✅ בניתי מערכת אוטומציה שמתחזקת את עצמה'
+      ],
+      code: `# האינטגרציה המלאה שבניתי:
+
+🧠 MCP Memory Server:
+   ✓ זוכר כל החלטה ארכיטקטונית
+   ✓ שומר context בין סשנים
+   ✓ מאפשר המשכיות מושלמת
+
+💻 GitHub Integration:
+   ✓ יצירת repos אוטומטית
+   ✓ ניהול PRs וissues
+   ✓ הגדרת CI/CD pipelines
+
+🚀 Vercel + פריסה:
+   ✓ פריסה אוטומטית על כל commit
+   ✓ הגדרת domains וSSL
+   ✓ מוניטורינג אוטומטי
+
+⚡ התוצאה: במקום לנהל באגים וconfigs,
+             אני מתמקד בבניית פיצ'רים!`
     },
     {
       id: 2,
-      title: '🤖 MCP Servers Network',
-      description: '7 שרתי MCP המספקים יכולות מתקדמות',
-      features: ['Memory Management', 'GitHub Operations', 'File System', 'Web Scraping'],
-      code: `Available MCP Servers:
-├── memory - Project context & decisions
-├── github - All GitHub operations  
-├── puppeteer - Browser automation
-├── filesystem - Advanced file ops
-├── fetch - HTTP requests & APIs
-└── analytics - Usage tracking`
+      title: '📚 המתודולוגיה - איך אני חושב על קוד',
+      description: 'השינוי המנטלי - מכתיבת קוד לארכיטקטורה מערכתית',
+      instruction: '🧠 השינוי האמיתי הוא באופן שאני חושב על קוד:',
+      features: [
+        '✅ במקום "איך לכתוב קומפוננטה?", אני שואל "איך המערכת צריכה להיראות?"',
+        '✅ במקום לחשוב על פונקציות, אני חושב על דפוסי עבודה',
+        '✅ במקום לעסוק בconfigs, אני מתמקד בפיצ\'רים',
+        '✅ במקום לדאוג לבאגים, אני בונה מערכות שלא נשברות'
+      ],
+      code: `# השינוי המנטלי שלי:
+
+👨‍💻 לפני - כתיבת קוד:
+   "איך לכתוב function שעושה X?"
+   "איך לחבר את הAPI הזה?"
+   "למה הconfig הזה לא עובד?"
+
+🤖 עכשיו - ארכיטקטורה מערכתית:
+   "איך המשתמש צריך לחוות את זה?"
+   "איך המערכת צריכה להתנהג?"
+   "איך לבנות שזה יעבוד גם בעוד 5 שנים?"
+
+⚡ התוצאה:
+   במקום לתקן באגים, אני מנע אותם
+   במקום לכתוב קוד, אני מתכנן מערכות
+   במקום לפתור בעיות, אני בונה פתרונות`
     },
     {
       id: 3,
-      title: '📊 Analytics & Monitoring',
-      description: 'מעקב שימוש ואנליטיקה מתקדמת',
-      features: ['Usage Tracking', 'Performance Metrics', 'Error Monitoring', 'Custom Dashboards'],
-      code: `npm run analytics:dashboard
-📈 Usage Analytics Ready
-🎯 Performance: 95% efficiency
-⚡ Response Time: 0.3s avg
-🔍 Error Rate: 0.1%`
+      title: '⚡ הקסם - פקודה אחת, פרויקט מלא',
+      description: 'איך פקודה אחת יוצרת פרויקט עם כל האינטגרציות',
+      instruction: '🚀 האוטומציה האמיתית - ראו מה קורה בפקודה אחת:',
+      features: [
+        '✅ אחרי פקודה אחת - כל האינטגרציות מתחברות אוטומטית',
+        '✅ GitHub ריפו, Vercel פריסה, וכל הconfigs - מוכנים',
+        '✅ המערכת "זוכרת" את פרטי הפרויקט ושומרת עקביות',
+        '✅ כל פרויקט מקבל את אותה רמת מקצועיות ואיכות'
+      ],
+      code: `# מה שקורה בפקודה אחת:
+./create-project my-awesome-app --type react
+
+⚡ מה שקורה אוטומטית:
+┌─ GitHub Repository
+│  ✓ יוצר ריפו חדש
+│  ✓ מגדיר branch protection
+│  ✓ מוסיף GitHub Actions
+│
+├─ Vercel Deployment  
+│  ✓ מחבר לריפו
+│  ✓ מגדיר auto-deploy
+│  ✓ מוסיף custom domain
+│
+├─ Development Environment
+│  ✓ React + TypeScript + Vite
+│  ✓ ESLint + Prettier + Tests
+│  ✓ מבנה תיקיות מושלם
+│
+└─ Documentation & Memory
+   ✓ README אוטומטי
+   ✓ שמירה בזיכרון המערכת
+   ✓ היסטורית החלטות
+
+🎉 תוך 3 דקות: מרעיון לפרויקט חי באינטרנט!`
     }
   ]
 
@@ -63,14 +125,19 @@ function DemoCarousel({ currentDemo, setCurrentDemo }) {
           <div className="demo-header">
             <h3>{demos[currentDemo].title}</h3>
             <p>{demos[currentDemo].description}</p>
+            {demos[currentDemo].instruction && (
+              <div className="demo-instruction">
+                <strong>{demos[currentDemo].instruction}</strong>
+              </div>
+            )}
           </div>
           
           <div className="demo-body">
             <div className="demo-features">
-              <h4>תכונות עיקריות:</h4>
+              <h4>מה תראו כאן:</h4>
               <ul>
                 {demos[currentDemo].features.map((feature, index) => (
-                  <li key={index}>✨ {feature}</li>
+                  <li key={index}>{feature}</li>
                 ))}
               </ul>
             </div>
