@@ -295,22 +295,6 @@ function LeadForm() {
           )}
         </button>
 
-        <div className="form-footer">
-          <div className="trust-signals">
-            <div className="signal">
-              <span>🔒</span>
-              <span>מידע מאובטח 100%</span>
-            </div>
-            <div className="signal">
-              <span>📧</span>
-              <span>שיתוף ידע - ללא מכירות</span>
-            </div>
-            <div className="signal">
-              <span>⚡</span>
-              <span>קוד מקור ומדריכים מיד</span>
-            </div>
-          </div>
-        </div>
       </form>
     </div>
   )
