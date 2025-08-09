@@ -110,9 +110,17 @@ body {
   backdrop-filter: blur(10px);
 }
 
-.primary-cta:hover, .secondary-cta:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(255, 107, 107, 0.4);
+.primary-cta:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(255, 107, 107, 0.5), 0 5px 15px rgba(255, 107, 107, 0.3);
+  background: linear-gradient(45deg, #ff8e8e, #ffb3b3);
+}
+
+.secondary-cta:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(255,255,255,0.3), 0 5px 15px rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.8);
 }
 
 /* System Overview Section - Dark Design */
@@ -152,8 +160,10 @@ body {
 }
 
 .explanation-card:hover {
-  transform: translateY(-10px);
-  background: rgba(30,30,40,0.95);
+  transform: translateY(-12px) scale(1.02);
+  background: rgba(30,30,40,0.98);
+  border-color: rgba(102,126,234,0.5);
+  box-shadow: 0 20px 40px rgba(102,126,234,0.2), 0 10px 25px rgba(0,0,0,0.3);
 }
 
 .explanation-icon {
@@ -367,8 +377,9 @@ body {
 
 .architecture-component:hover {
   background: rgba(102, 126, 234, 0.2);
-  border-color: rgba(102, 126, 234, 0.6);
-  transform: scale(1.05);
+  border-color: rgba(102, 126, 234, 0.8);
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 15px 30px rgba(102, 126, 234, 0.3), 0 5px 15px rgba(0,0,0,0.2);
 }
 
 .component-icon {
@@ -1129,10 +1140,11 @@ body {
 }
 
 .step-content h3 {
-  color: #667eea;
+  color: #2d3748;
   font-size: 1.5rem;
   margin-bottom: 15px;
   font-weight: 600;
+  text-shadow: none;
 }
 
 .step-content p {
@@ -1662,6 +1674,15 @@ img {
   flex: 1;
   min-width: 250px;
   backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
+}
+
+.step-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  background: rgba(30,30,40,0.98);
+  border-color: rgba(102,126,234,0.6);
+  box-shadow: 0 15px 35px rgba(102,126,234,0.2), 0 5px 15px rgba(0,0,0,0.3);
 }
 
 .step-card h4 {
@@ -1724,6 +1745,15 @@ img {
   min-width: 300px;
   max-width: 400px;
   backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
+}
+
+.resource-card:hover {
+  transform: translateY(-10px) scale(1.03);
+  background: rgba(30,30,40,0.98);
+  border-color: rgba(102,126,234,0.7);
+  box-shadow: 0 20px 40px rgba(102,126,234,0.25), 0 8px 25px rgba(0,0,0,0.3);
 }
 
 .resource-card h3 {
