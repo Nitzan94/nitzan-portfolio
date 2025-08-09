@@ -1,0 +1,395 @@
+/* === EDIT MODE & CMS STYLES === */
+
+/* Admin Trigger Button */
+.admin-trigger {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.admin-trigger-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+  opacity: 0.7;
+}
+
+.admin-trigger-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* Admin Panel */
+.admin-panel {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 320px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: 2px solid #e9ecef;
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideInUp 0.3s ease forwards;
+}
+
+@keyframes slideInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.admin-panel.edit-mode {
+  border-color: #28a745;
+  box-shadow: 0 10px 30px rgba(40, 167, 69, 0.2);
+}
+
+.admin-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  color: white;
+  border-radius: 13px 13px 0 0;
+}
+
+.admin-panel-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.close-edit-mode {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.close-edit-mode:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.admin-panel-content {
+  padding: 1rem;
+}
+
+.edit-status {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.status-indicator {
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.25rem 0;
+}
+
+.status-indicator.active {
+  color: #28a745;
+}
+
+.changes-indicator {
+  font-size: 0.8rem;
+  color: #ffc107;
+  font-weight: 600;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.admin-btn {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.save-btn {
+  background: #28a745;
+  color: white;
+}
+
+.save-btn:hover:not(:disabled) {
+  background: #218838;
+  transform: translateY(-1px);
+}
+
+.save-btn:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.reset-btn {
+  background: #dc3545;
+  color: white;
+}
+
+.reset-btn:hover:not(:disabled) {
+  background: #c82333;
+  transform: translateY(-1px);
+}
+
+.reset-btn:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.edit-instructions {
+  border-top: 1px solid #e9ecef;
+  padding-top: 1rem;
+  margin-top: 1rem;
+}
+
+.edit-instructions h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.edit-instructions ul {
+  margin: 0;
+  padding-right: 1rem;
+  font-size: 0.8rem;
+  color: #666;
+  list-style-type: '• ';
+}
+
+.edit-instructions li {
+  margin-bottom: 0.25rem;
+  line-height: 1.4;
+}
+
+/* Editable Text Styles */
+.editable-text {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.editable-text.editable {
+  border: 2px dashed transparent;
+  border-radius: 4px;
+  padding: 2px 4px;
+  margin: -2px -4px;
+}
+
+.editable-text.editable:hover {
+  background-color: rgba(102, 126, 234, 0.05);
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+.editable-text .edit-indicator {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 0.7rem;
+  background: #667eea;
+  color: white;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.editable-text.editable:hover .edit-indicator {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Editing Container */
+.editable-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.editable-container.editing {
+  z-index: 100;
+}
+
+.editable-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 2px solid #667eea;
+  border-radius: 6px;
+  font-size: inherit;
+  font-family: inherit;
+  color: inherit;
+  background: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.editable-input.multiline {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.4;
+}
+
+.editable-input:focus {
+  border-color: #5a67d8;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.edit-controls {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  display: flex;
+  gap: 4px;
+  z-index: 101;
+}
+
+.edit-save-btn,
+.edit-cancel-btn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-weight: bold;
+}
+
+.edit-save-btn {
+  background: #28a745;
+  color: white;
+}
+
+.edit-save-btn:hover {
+  background: #218838;
+  transform: scale(1.1);
+}
+
+.edit-cancel-btn {
+  background: #dc3545;
+  color: white;
+}
+
+.edit-cancel-btn:hover {
+  background: #c82333;
+  transform: scale(1.1);
+}
+
+/* Edit Mode Body Styles */
+body.edit-mode {
+  cursor: crosshair;
+}
+
+body.edit-mode * {
+  transition: all 0.2s ease;
+}
+
+/* Global Edit Mode Indicator */
+.edit-mode-indicator {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: linear-gradient(45deg, #28a745, #20c997);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+  z-index: 999;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .admin-panel {
+    width: calc(100vw - 40px);
+    right: 20px;
+    left: 20px;
+    bottom: 80px;
+  }
+  
+  .admin-trigger {
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .edit-mode-indicator {
+    top: 10px;
+    left: 10px;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+  
+  .editable-input {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+/* Animation for newly edited elements */
+.just-edited {
+  animation: editSuccess 0.6s ease;
+}
+
+@keyframes editSuccess {
+  0% {
+    background-color: rgba(40, 167, 69, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    background-color: rgba(40, 167, 69, 0.1);
+    transform: scale(1.02);
+  }
+  100% {
+    background-color: transparent;
+    transform: scale(1);
+  }
+}
